@@ -1,0 +1,3921 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="prizm.ico" type="image/x-icon">
+<title>PRIZM BRAND — LEGACY DROP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f4f0;
+    --fg: #0a0a0a;
+    --accent: #0a0a0a;
+    --accent-inv: #f5f4f0;
+    --card-bg: #eeecea;
+    --border: rgba(0,0,0,0.12);
+    --muted: rgba(0,0,0,0.45);
+    --overlay: rgba(0,0,0,0.55);
+    --nav-bg: rgba(245,244,240,0.92);
+  }
+  [data-theme="dark"] {
+    --bg: #0a0a0a;
+    --fg: #f0ede8;
+    --accent: #f0ede8;
+    --accent-inv: #0a0a0a;
+    --card-bg: #141414;
+    --border: rgba(255,255,255,0.1);
+    --muted: rgba(255,255,255,0.4);
+    --overlay: rgba(0,0,0,0.75);
+    --nav-bg: rgba(10,10,10,0.92);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Space Mono', monospace;
+    background: var(--bg);
+    color: var(--fg);
+    transition: background 0.4s, color 0.4s;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+::-moz-selection {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+  .like-box {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: 'Space Mono', monospace;
+}
+
+.heart-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--muted);
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.heart-btn:hover {
+  transform: scale(1.08);
+  color: crimson;
+  border-color: crimson;
+}
+
+.heart-btn.liked {
+  background: crimson;
+  color: white;
+  border-color: crimson;
+}
+
+#likeCount {
+  font-size: 0.8rem;
+  color: var(--fg);
+}
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: var(--nav-bg);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2rem; height: 60px;
+  }
+  .nav-logo img { height: 32px; filter: var(--logo-filter, none); }
+  [data-theme="dark"] .nav-logo img { filter: invert(1); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--fg); text-decoration: none; opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+  .nav-links a:hover { opacity: 1; }
+  .theme-toggle {
+    background: none; border: 1px solid var(--border);
+    color: var(--fg); cursor: pointer;
+    width: 36px; height: 36px; border-radius: 50%;
+    font-size: 1rem; display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .theme-toggle:hover { background: var(--fg); color: var(--bg); }
+
+  .nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.audio-btn {
+  width: 36px;
+  height: 36px;
+
+  border: 1px solid var(--border);
+  border-radius: 0;
+
+  background: none;
+  color: var(--fg);
+
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  line-height: 2;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.audio-btn:hover {
+  background: transparent;
+  color: var(--fg);
+  border-color: var(--fg);
+
+}
+
+.audio-btn.playing {
+  background: transparent;
+  color: var(--fg);
+  border-color: var(--fg);
+}
+
+  /* ─── HERO / S1 ─── */
+  #hero {
+    min-height: 100vh; padding-top: 60px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    position: relative; overflow: hidden;
+  }
+  .hero-left {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 6rem 3rem 6rem 4rem;
+    position: relative; z-index: 2;
+  }
+  .drop-label {
+    font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .drop-label::before {
+    content: ''; display: block; width: 32px; height: 1px; background: var(--muted);
+  }
+  h1.hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(5rem, 10vw, 11rem);
+    line-height: 0.9; letter-spacing: 0.02em;
+    color: var(--fg);
+  }
+  .hero-subtitle {
+    margin-top: 2rem;
+    font-size: 0.78rem; line-height: 1.8; color: var(--muted);
+    max-width: 380px;
+  }
+  .hero-cta {
+    margin-top: 2.5rem;
+    display: inline-flex; align-items: center; gap: 0.75rem;
+    background: var(--accent); color: var(--accent-inv);
+    padding: 1rem 2rem; text-decoration: none;
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    border: none; cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-family: 'Space Mono', monospace;
+  }
+  .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.25); }
+  .hero-cta-arrow { font-size: 1.1rem; }
+
+  .hero-right {
+    position: relative; display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .hero-right img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.8s ease;
+  }
+  .hero-right:hover img { transform: scale(1.03); }
+  .hero-right::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to right, var(--bg) 0%, transparent 30%);
+    pointer-events: none;
+  }
+
+  .hero-ticker {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: var(--fg); color: var(--bg);
+    padding: 0.6rem 0; overflow: hidden; z-index: 10;
+  }
+  .ticker-track {
+    display: flex; gap: 0; white-space: nowrap;
+    animation: ticker 18s linear infinite;
+  }
+  .ticker-item {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem; letter-spacing: 0.15em;
+    padding: 0 2rem;
+    display: flex; align-items: center; gap: 1.5rem;
+  }
+  .ticker-item::after { content: '△'; opacity: 0.5; }
+  @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+  /* ─── S2 GENESIS ─── */
+  #genesis {
+    padding: 8rem 4rem;
+    display: grid; grid-template-columns: 1fr 1.4fr;
+    gap: 5rem; align-items: start;
+  }
+  .genesis-text h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    line-height: 1.1; margin-bottom: 2rem;
+    font-style: italic;
+  }
+  .genesis-text p {
+    font-size: 0.8rem; line-height: 2; color: var(--muted);
+    margin-bottom: 1rem;
+  }
+  .genesis-text strong { color: var(--fg); }
+  .genesis-year {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 8rem; color: var(--border);
+    line-height: 1; margin-bottom: 1rem;
+    user-select: none;
+  }
+
+  /* Slider genesis */
+  .genesis-slider-wrap { position: relative; overflow: hidden; }
+  .genesis-slider {
+    display: flex; transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+  .genesis-slide {
+    min-width: 100%; aspect-ratio: 4/3;
+    background: var(--card-bg); border: 1px solid var(--border);
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .genesis-slide img { width: 100%; height: 100%; object-fit: cover; }
+  .slide-caption {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: var(--overlay); color: #fff;
+    padding: 1rem 1.5rem;
+    font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+  }
+  .slide-placeholder {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 1rem; color: var(--muted);
+    font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .slide-placeholder span { font-size: 3rem; opacity: 0.3; }
+  .slider-nav {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 1rem;
+  }
+  .slider-dots { display: flex; gap: 0.5rem; }
+  .slider-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--border); cursor: pointer; transition: background 0.2s;
+  }
+  .slider-dot.active { background: var(--fg); }
+  .slider-arrows { display: flex; gap: 0.5rem; }
+  .slider-btn {
+    width: 36px; height: 36px; border: 1px solid var(--border);
+    background: none; color: var(--fg); cursor: pointer;
+    font-size: 1rem; display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .slider-btn:hover { background: var(--fg); color: var(--bg); }
+
+  /* ─── S3 LOTS ─── */
+  #lots { padding: 6rem 0; }
+  .lots-header {
+    padding: 0 4rem; margin-bottom: 3rem;
+    display: flex; align-items: flex-end; justify-content: space-between;
+  }
+  .lots-header h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 6vw, 6rem); line-height: 1;
+  }
+  .lots-header p { font-size: 0.7rem; color: var(--muted); max-width: 260px; text-align: right; }
+
+  .lots-track-wrap {
+    overflow: hidden; position: relative;
+    padding: 0 4rem;
+  }
+  .lots-track {
+    display: flex; gap: 1.5rem;
+    cursor: grab; user-select: none;
+    will-change: transform;
+    width: max-content;
+  }
+  .lots-track.dragging { cursor: grabbing; transition: none; }
+
+  .lot-card {
+  min-width: 220px;
+  height: min(50vh, 360px);
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+  .lot-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+  .lot-card.locked { cursor: default; }
+  .lot-card.locked:hover { transform: none; box-shadow: none; }
+  .lot-card img { width: 100%; height: 100%; object-fit: cover; }
+
+  .lot-info {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, var(--fg) 0%, transparent 100%);
+    padding: 3rem 1.2rem 1.2rem;
+    color: var(--bg);
+  }
+  [data-theme="dark"] .lot-info { background: linear-gradient(to top, #000 0%, transparent 100%); color: var(--fg); }
+
+  .lot-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.7rem; letter-spacing: 0.2em; opacity: 0.7;
+  }
+  .lot-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem; letter-spacing: 0.05em;
+    line-height: 1;
+  }
+
+  .lot-lock {
+    position: absolute; inset: 0;
+    background: var(--overlay);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 0.5rem;
+    color: rgba(255,255,255,0.9);
+    backdrop-filter: blur(2px);
+  }
+  .lot-lock svg { width: 28px; height: 28px; }
+  .lot-lock span {
+    font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+    opacity: 0.7;
+  }
+  .lot-lock-placeholder {
+    width: 100%; height: 100%;
+    background: repeating-linear-gradient(
+      45deg,
+      var(--card-bg),
+      var(--card-bg) 10px,
+      var(--border) 10px,
+      var(--border) 11px
+    );
+  }
+
+  /* ─── S4 PRODUCT ─── */
+  #product {
+    padding: 8rem 4rem;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 5rem; align-items: center;
+  }
+  .product-img {
+    position: relative;
+  }
+  .product-img img {
+    width: 100%; aspect-ratio: 1;
+    object-fit: cover; border: 1px solid var(--border);
+  }
+  .product-badge {
+    position: absolute; top: 1rem; left: 1rem;
+    background: var(--fg); color: var(--bg);
+    font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+    padding: 0.4rem 0.8rem;
+  }
+  .product-info { display: flex; flex-direction: column; gap: 1.5rem; }
+  .product-collection {
+    font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted);
+  }
+  .product-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 5vw, 5.5rem); line-height: 0.9;
+  }
+  .product-price {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.5rem; font-style: italic;
+  }
+  .product-meta {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .meta-item { border-top: 1px solid var(--border); padding-top: 0.8rem; }
+  .meta-label { font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.3rem; }
+  .meta-val { font-size: 0.8rem; font-weight: 700; }
+
+  .size-btn {
+    background: none; border: 1px solid var(--border);
+    color: var(--fg); padding: 0.5rem 1rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.1em;
+    cursor: pointer; transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+  }
+  .size-btn:hover { background: var(--fg); color: var(--bg); }
+
+  .availability-note {
+    font-size: 0.65rem; color: var(--muted); line-height: 1.7;
+    border-left: 2px solid var(--fg); padding-left: 1rem;
+  }
+
+  /* ─── MODAL ─── */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+    z-index: 200; display: none; align-items: center; justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--bg); border: 1px solid var(--border);
+    padding: 3rem; max-width: 480px; width: 90%;
+    position: relative;
+  }
+  .modal-close {
+    position: absolute; top: 1rem; right: 1rem;
+    background: none; border: none; color: var(--fg);
+    font-size: 1.5rem; cursor: pointer;
+  }
+  .modal h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem; margin-bottom: 1.5rem;
+  }
+  .size-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+  .size-table th, .size-table td {
+    border: 1px solid var(--border); padding: 0.7rem 1rem; text-align: center;
+  }
+  .size-table th { background: var(--card-bg); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; }
+  .modal-note { margin-top: 1.5rem; font-size: 0.65rem; color: var(--muted); line-height: 1.7; }
+
+  /* ─── S5 COLLAB ─── */
+  #collab {
+    padding: 8rem 4rem;
+    background: var(--fg); color: var(--bg);
+    position: relative; overflow: hidden;
+  }
+  #collab::before {
+    content: 'COLLAB'; position: absolute;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20rem; opacity: 0.04; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap; pointer-events: none;
+    color: var(--bg);
+  }
+  .collab-inner { position: relative; z-index: 2; max-width: 900px; margin: 0 auto; text-align: center; }
+  #collab h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.5rem, 5vw, 5rem);
+    font-style: italic; margin-bottom: 1.5rem;
+  }
+  #collab p { font-size: 0.78rem; line-height: 2; opacity: 0.6; margin-bottom: 2.5rem; max-width: 600px; margin-left: auto; margin-right: auto; }
+  .collab-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-bottom: 3rem; }
+  .collab-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 2.5rem 1.5rem; text-align: center;
+  }
+  .collab-card-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .collab-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; margin-bottom: 0.5rem; }
+  .collab-card p { font-size: 0.7rem; opacity: 0.5; }
+  .collab-cta {
+    display: inline-block;
+    border: 1px solid rgba(255,255,255,0.3);
+    color: var(--bg); padding: 1rem 2.5rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    text-decoration: none; transition: all 0.2s;
+    background: none;
+    cursor: pointer;
+  }
+  .collab-cta:hover { background: var(--bg); color: var(--fg); }
+
+  /* ─── S6 CONTACT ─── */
+  #contact { padding: 8rem 4rem; }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; }
+  #contact h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 4vw, 4.5rem); margin-bottom: 2rem; grid-column: 1/-1;
+  }
+  .store-info h3 {
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 1rem;
+  }
+  .store-address {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem; line-height: 1.4; margin-bottom: 1.5rem;
+  }
+  .store-hours { font-size: 0.75rem; color: var(--muted); line-height: 2; }
+
+  .social-links { display: flex; flex-direction: column; gap: 1rem; }
+  .social-links h3 {
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 0.5rem;
+  }
+  .social-link {
+    display: flex; align-items: center; gap: 1rem;
+    text-decoration: none; color: var(--fg);
+    padding: 1rem; border: 1px solid var(--border);
+    transition: all 0.2s;
+    font-size: 0.8rem;
+  }
+  .social-link:hover { background: var(--fg); color: var(--bg); }
+  .social-link-icon { font-size: 1.2rem; width: 24px; text-align: center; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem 4rem;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  footer p { font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; }
+  footer img { height: 20px; opacity: 0.5; }
+  [data-theme="dark"] footer img { filter: invert(1); }
+
+  /* ─── SECTION DIVIDER ─── */
+  .divider {
+    height: 1px; background: var(--border); margin: 0 4rem;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    #hero { grid-template-columns: 1fr; }
+    .hero-right { height: 50vh; }
+    .hero-right::after { background: linear-gradient(to bottom, var(--bg) 0%, transparent 30%); }
+    #genesis { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 2rem; }
+    #product { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 2rem; }
+    .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .lots-header, #contact, footer { padding-left: 2rem; padding-right: 2rem; }
+    .lots-track-wrap { padding: 0 2rem; }
+    .hero-left { padding: 5rem 2rem 4rem; }
+    #collab { padding: 6rem 2rem; }
+    .collab-cards { grid-template-columns: 1fr; }
+    nav { padding: 0 1.5rem; }
+    .nav-links { display: none; }
+    .lot-card {
+  min-width: 180px;
+  height: min(45vh, 300px);
+}
+  }
+
+  /* ─── ANIMATIONS ─── */
+  .fade-up {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+/* ─── PRIZM STYLE AI CHAT ─── */
+.ai-chat {
+  position: fixed;
+  left: 24px;
+  bottom: 24px;
+  z-index: 999;
+  font-family: 'Space Mono', monospace;
+}
+
+/* PANEL */
+.ai-chat-panel {
+  position: absolute;
+  left: 0;
+  bottom: 78px;
+
+  width: min(380px, calc(100vw - 32px));
+  height: min(560px, calc(100vh - 110px));
+
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  overflow: hidden;
+
+  background: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--border);
+
+  box-shadow: 0 24px 70px rgba(0,0,0,0.22);
+
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(18px);
+  transform-origin: left bottom;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.ai-chat.open .ai-chat-panel {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* HEADER */
+.ai-chat-header {
+  min-height: 76px;
+  padding: 1rem 1.1rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: var(--fg);
+  color: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.ai-chat-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  min-width: 0;
+}
+
+.ai-chat-avatar {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+
+  display: grid;
+  place-items: center;
+
+  border: 1px solid rgba(255,255,255,0.25);
+  background: transparent;
+  color: var(--bg);
+}
+
+.ai-chat-title {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ai-chat-title strong {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.7rem;
+  line-height: 0.9;
+  letter-spacing: 0.08em;
+}
+
+.ai-chat-title span {
+  margin-top: 0.35rem;
+  font-size: 0.55rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.65;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ai-chat-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.ai-chat-status::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--bg);
+  opacity: 0.8;
+}
+
+/* CLOSE */
+.ai-chat-close {
+  width: 36px;
+  height: 36px;
+
+  border: 1px solid rgba(255,255,255,0.25);
+  background: transparent;
+  color: var(--bg);
+
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.ai-chat-close:hover {
+  background: var(--bg);
+  color: var(--fg);
+  transform: rotate(90deg);
+}
+
+/* MESSAGES AREA */
+.ai-chat-messages {
+  padding: 1rem;
+  overflow-y: auto;
+
+  background:
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 12px,
+      var(--border) 12px,
+      var(--border) 13px
+    ),
+    var(--card-bg);
+
+  scrollbar-width: thin;
+  scrollbar-color: var(--muted) transparent;
+}
+
+/* MESSAGE BUBBLES */
+.ai-msg {
+  width: fit-content;
+  max-width: 84%;
+
+  margin: 0 0 0.8rem;
+  padding: 0.85rem 1rem;
+
+  font-family: 'Space Mono', monospace;
+  font-size: 0.72rem;
+  line-height: 1.65;
+
+  border: 1px solid var(--border);
+  animation: aiMsgIn 0.22s ease both;
+}
+
+.ai-msg.bot {
+  color: var(--fg);
+  background: var(--bg);
+}
+
+.ai-msg.user {
+  margin-left: auto;
+  color: var(--accent-inv);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* FORM */
+.ai-chat-form {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+
+  padding: 0.9rem;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+}
+
+.ai-chat-input {
+  min-width: 0;
+  flex: 1;
+  height: 46px;
+
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--fg);
+
+  padding: 0 0.9rem;
+  outline: none;
+
+  font-family: 'Space Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+
+  transition: border 0.2s ease, background 0.2s ease;
+}
+
+.ai-chat-input::placeholder {
+  color: var(--muted);
+}
+
+.ai-chat-input:focus {
+  border-color: var(--fg);
+  background: var(--card-bg);
+}
+
+/* SEND BUTTON */
+.ai-chat-send {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+
+  border: 1px solid var(--fg);
+  background: var(--fg);
+  color: var(--bg);
+
+  display: grid;
+  place-items: center;
+
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.ai-chat-send:hover {
+  transform: translateY(-2px);
+  background: transparent;
+  color: var(--fg);
+}
+
+.ai-chat-send:disabled {
+  opacity: 0.45;
+  cursor: wait;
+  transform: none;
+}
+
+/* TOGGLE BUTTON */
+.ai-chat-toggle {
+  position: relative;
+
+  width: 62px;
+  height: 62px;
+
+  border: 1px solid var(--fg);
+  background: var(--fg);
+  color: var(--bg);
+
+  display: grid;
+  place-items: center;
+
+  cursor: pointer;
+
+  box-shadow: 0 14px 40px rgba(0,0,0,0.24);
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.ai-chat-toggle:hover {
+  transform: translateY(-3px);
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.ai-chat-toggle::before {
+  content: '';
+  position: absolute;
+  inset: -7px;
+  border: 1px solid var(--border);
+  opacity: 0;
+  animation: aiPulse 2.4s ease infinite;
+}
+
+.ai-chat.open .ai-chat-toggle::before {
+  display: none;
+}
+
+.ai-chat-toggle svg,
+.ai-chat-send svg,
+.ai-chat-avatar svg {
+  display: block;
+}
+
+/* ANIMATIONS */
+@keyframes aiPulse {
+  0% {
+    opacity: 0.55;
+    transform: scale(0.9);
+  }
+
+  70%,
+  100% {
+    opacity: 0;
+    transform: scale(1.18);
+  }
+}
+
+@keyframes aiMsgIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* MOBILE */
+@media (max-width: 520px) {
+  .ai-chat {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+  }
+
+  .ai-chat-panel {
+    width: 100%;
+    height: min(560px, calc(100vh - 96px));
+    bottom: 74px;
+  }
+
+  .ai-chat-toggle {
+    width: 58px;
+    height: 58px;
+  }
+
+  .ai-chat-title span {
+    max-width: 210px;
+  }
+}
+
+/* ─── DRAWING LAYER ─── */
+#drawLayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 998;
+  pointer-events: none;
+  mix-blend-mode: difference;
+}
+
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <img id="nav-logo-img" src="" alt="PRIZM BRAND">
+  </div>
+  <ul class="nav-links">
+    <li><a href="#hero">Drop</a></li>
+    <li><a href="#genesis">Geneza</a></li>
+    <li><a href="#lots">Loty</a></li>
+    <li><a href="#product">Produkt</a></li>
+    <li><a href="#collab">Collab</a></li>
+    <li><a href="#contact">Kontakt</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="audio-btn" id="audioBtn" type="button" aria-label="Odtwórz audio">▶</button>
+    <button class="theme-toggle" id="themeBtn" aria-label="Toggle theme">☀</button>
+  </div>
+  
+  <audio id="pageAudio" src="audioliza.mp3" preload="auto"></audio>
+</nav>
+
+<!-- ─── SEKCJA 1: HERO / LEGACY DROP ─── -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="drop-label">PRIZM BRAND — DROP 001</div>
+    <h1 class="hero-title">LEGACY</h1>
+    <p class="hero-subtitle">
+      Pierwszy oficjalny drop marki PRIZM BRAND. Limitowana kolekcja — gdy zapasy się wyczerpią, nie wróci już nigdy. To nie jest produkt. To dziedzictwo.
+    </p>
+    <a href="#product" class="hero-cta">
+      Zobacz koszulkę <span class="hero-cta-arrow">→</span>
+    </a>
+  </div>
+  <div class="hero-right">
+    <img id="model" src="" alt="LEGACY Tee">
+  </div>
+  <div class="hero-ticker">
+    <div class="ticker-track" id="ticker">
+      <span class="ticker-item">PRIZM BRAND</span>
+      <span class="ticker-item">LEGACY DROP</span>
+      <span class="ticker-item">LOT 001</span>
+      <span class="ticker-item">LIMITOWANE</span>
+      <span class="ticker-item">BOBOWA</span>
+      <span class="ticker-item">PRIZM BRAND</span>
+      <span class="ticker-item">LEGACY DROP</span>
+      <span class="ticker-item">LOT 001</span>
+      <span class="ticker-item">LIMITOWANE</span>
+      <span class="ticker-item">BOBOWA</span>
+      <span class="ticker-item">PRIZM BRAND</span>
+      <span class="ticker-item">LEGACY DROP</span>
+      <span class="ticker-item">LOT 001</span>
+      <span class="ticker-item">LIMITOWANE</span>
+      <span class="ticker-item">BOBOWA</span>
+      <span class="ticker-item">PRIZM BRAND</span>
+      <span class="ticker-item">LEGACY DROP</span>
+      <span class="ticker-item">LOT 001</span>
+      <span class="ticker-item">LIMITOWANE</span>
+      <span class="ticker-item">BOBOWA</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── SEKCJA 2: GENEZA ─── -->
+<section id="genesis">
+  <div class="genesis-text fade-up">
+    <div class="genesis-year">18</div>
+    <h2>Od marzenia<br>do dziedzictwa.</h2>
+    <p>
+      Jako <strong>18-latek</strong> obserwowałem, jak ASAP Bari buduje VLONE — brand oparty na kulturze, autentyczności i ulicy. Chciałem tego samego. Chciałem zostawić po sobie coś, co mówi: <em>byłem tu, miałem wizję.</em>
+    </p>
+    <p>
+      Cztery lata pracy, projektów i marzeń. Dziś, jako <strong>22-latek</strong>, w niespodziewanej kolaboracji z mistrzem krawieckim z Chin, nareszcie to osiągnąłem. PRIZM BRAND to nie tylko ubrania — to filozofia.
+    </p>
+    <p style="margin-top:1.5rem;">
+      <em>"Nie kopiuję kultury. Tworzę ją."</em>
+    </p>
+  </div>
+
+  <div class="genesis-slider-wrap fade-up">
+    <div class="genesis-slider" id="genesisSlider">
+      <!-- Slide 1: Początki -->
+      <div class="genesis-slide">
+        <img src="bari.jpg" alt="" class="slide-placeholder">
+
+        <div class="slide-caption">Początki — sketchbook, długopis i marzenie</div>
+      </div>
+      <!-- Slide 2: Designy -->
+      <div class="genesis-slide">
+        <img src="sketch.png" alt="" class="slide-placeholder">
+        <div class="slide-caption">Ewolucja designu — od szkiców do wektorów</div>
+      </div>
+      <!-- Slide 3: Produkt -->
+      <div class="genesis-slide">
+        <img id="genesis-slide-img" src="" alt="LEGACY Collection">
+        <div class="slide-caption">2024 — PRIZM BRAND: LEGACY Collection</div>
+      </div>
+    </div>
+    <div class="slider-nav">
+      <div class="slider-dots">
+        <div class="slider-dot active" data-idx="0" data-slider="genesis"></div>
+        <div class="slider-dot" data-idx="1" data-slider="genesis"></div>
+        <div class="slider-dot" data-idx="2" data-slider="genesis"></div>
+      </div>
+      <div class="slider-arrows">
+        <button class="slider-btn" id="genPrev">←</button>
+        <button class="slider-btn" id="genNext">→</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── SEKCJA 3: LOTY ─── -->
+<section id="lots">
+  <div class="lots-header fade-up">
+    <h2>LOTY</h2>
+    <p>Przesuń, żeby zobaczyć wszystkie wydane loty. Każdy lot to osobny rozdział historii PRIZM.</p>
+  </div>
+  <div class="lots-track-wrap">
+    <div class="lots-track" id="lotsTrack">
+
+      <!-- LOT 1 — AKTYWNY -->
+      <div class="lot-card" data-lot="1" data-active="true">
+        <img id="lot1-img" src="" alt="LOT 1 LEGACY">
+        <div class="lot-info">
+          <div class="lot-number">LOT 001</div>
+          <div class="lot-name">LEGACY</div>
+        </div>
+      </div>
+
+      
+
+      <!-- LOT 2-10 — ZABLOKOWANE -->
+      <div class="lot-card locked" data-lot="2"><div class="lot-lock-placeholder"></div><div class="lot-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Nadchodzi</span></div><div class="lot-info" style="background:none;position:absolute;bottom:0;padding:1rem"><div class="lot-number" style="color:#fff;opacity:0.4">LOT 002</div></div></div>
+      <div class="lot-card locked" data-lot="3"><div class="lot-lock-placeholder"></div><div class="lot-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Nadchodzi</span></div><div class="lot-info" style="background:none;position:absolute;bottom:0;padding:1rem"><div class="lot-number" style="color:#fff;opacity:0.4">LOT 003</div></div></div>
+      <div class="lot-card locked" data-lot="4"><div class="lot-lock-placeholder"></div><div class="lot-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Nadchodzi</span></div><div class="lot-info" style="background:none;position:absolute;bottom:0;padding:1rem"><div class="lot-number" style="color:#fff;opacity:0.4">LOT 004</div></div></div>
+      <div class="lot-card locked" data-lot="5"><div class="lot-lock-placeholder"></div><div class="lot-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Nadchodzi</span></div><div class="lot-info" style="background:none;position:absolute;bottom:0;padding:1rem"><div class="lot-number" style="color:#fff;opacity:0.4">LOT 005</div></div></div>
+      <div class="lot-card" data-lot="6" data-active="true">
+        <img id="lot1-img" src="awge.png" alt="LOT 6 LEGACY">
+        <div class="lot-info">
+          <div class="lot-number">LOT 006</div>
+          <div class="lot-name">DON'T BE CHUMP</div>
+        </div>
+      </div>
+      <div class="lot-card locked" data-lot="7"><div class="lot-lock-placeholder"></div><div class="lot-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Nadchodzi</span></div><div class="lot-info" style="background:none;position:absolute;bottom:0;padding:1rem"><div class="lot-number" style="color:#fff;opacity:0.4">LOT 007</div></div></div>
+      <div class="lot-card locked" data-lot="8"><div class="lot-lock-placeholder"></div><div class="lot-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Nadchodzi</span></div><div class="lot-info" style="background:none;position:absolute;bottom:0;padding:1rem"><div class="lot-number" style="color:#fff;opacity:0.4">LOT 008</div></div></div>
+      <div class="lot-card locked" data-lot="9"><div class="lot-lock-placeholder"></div><div class="lot-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Nadchodzi</span></div><div class="lot-info" style="background:none;position:absolute;bottom:0;padding:1rem"><div class="lot-number" style="color:#fff;opacity:0.4">LOT 009</div></div></div>
+      <div class="lot-card" data-lot="10" data-active="true">
+        <img id="lot1-img" src="cir.png" alt="LOT 10 CM">
+        <div class="lot-info">
+          <div class="lot-number">LOT 010</div>
+          <div class="lot-name">CIRCVS MAXIMVS</div>
+        </div>
+      </div>
+      <div class="lot-card locked" data-lot="11"><div class="lot-lock-placeholder"></div><div class="lot-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Nadchodzi</span></div><div class="lot-info" style="background:none;position:absolute;bottom:0;padding:1rem"><div class="lot-number" style="color:#fff;opacity:0.4">LOT 011</div></div></div>
+      <div class="lot-card locked" data-lot="12"><div class="lot-lock-placeholder"></div><div class="lot-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Nadchodzi</span></div><div class="lot-info" style="background:none;position:absolute;bottom:0;padding:1rem"><div class="lot-number" style="color:#fff;opacity:0.4">LOT 012</div></div></div>
+      
+      <div class="lot-card" data-lot="43" data-active="true">
+        <img id="lot1-img" src="druga.png" alt="LOT 2 DANTE ALIGHERI">
+        <div class="lot-info">
+          <div class="lot-number">LOT 043</div>
+          <div class="lot-name">ALIGHIERI</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── SEKCJA 4: PRODUKT ─── -->
+<section id="product">
+  <div class="product-img fade-up">
+    <div class="product-badge">DROP — LEGACY</div>
+    <img id="product-img" src="" alt="PRIZM BRAND LEGACY Tee">
+  </div>
+  <div class="product-info fade-up">
+    <div class="product-collection">PRIZM BRAND — KOLEKCJA LEGACY</div>
+    <h2 class="product-name">LEGACY<br>TEE</h2>
+    <div class="product-price">169,99 zł</div>
+
+    <div class="like-box">
+  <button class="heart-btn" id="heartBtn" data-shirt="legacy-tee">
+    ♥
+  </button>
+  <span id="likeCount">0</span>
+</div>
+
+    <div class="product-meta">
+      <div class="meta-item">
+        <div class="meta-label">Kolor</div>
+        <div class="meta-val">Biały / Czarny print</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Typ produktu</div>
+        <div class="meta-val">Oversize T-Shirt</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Materiał</div>
+        <div class="meta-val">100% Bawełna</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Dostępność</div>
+        <div class="meta-val">S — XL</div>
+      </div>
+    </div>
+    <button class="size-btn" id="openSizeModal">
+      📐 Tabela rozmiarów & zakup
+    </button>
+    <div class="availability-note">
+      Dostępne wyłącznie do wyczerpania zapasów. Po wyczerpaniu kolekcja <strong>LEGACY</strong> już nigdy więcej się nie ukaże. Następny drop zostanie ogłoszony osobno.
+    </div>
+  </div>
+</section>
+
+<!-- SIZE MODAL -->
+<div class="modal-overlay" id="sizeModal">
+  <div class="modal">
+    <button class="modal-close" id="closeModal">✕</button>
+    <h3>TABELA ROZMIARÓW</h3>
+    <table class="size-table">
+      <thead>
+        <tr>
+          <th>Rozmiar</th>
+          <th>Klatka (cm)</th>
+          <th>Długość (cm)</th>
+          <th>Cena</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>S</strong></td><td>96–100</td><td>68</td><td>169,99 zł</td></tr>
+        <tr><td><strong>M</strong></td><td>100–104</td><td>71</td><td>169,99 zł</td></tr>
+        <tr><td><strong>L</strong></td><td>104–110</td><td>74</td><td>169,99 zł</td></tr>
+        <tr><td><strong>XL</strong></td><td>110–116</td><td>77</td><td>169,99 zł</td></tr>
+      </tbody>
+    </table>
+    <div class="modal-note">
+      🏪 <strong>Dostępne do kupienia wyłącznie na miejscu:</strong><br>
+      Sklep Chiński BOBOWA<br>
+      ul. Długa 7, 38-350 Bobowa<br><br>
+      ⚠️ Dostępne do wyczerpania zapasów. Kolekcja LEGACY jest jednorazowa — gdy skończy się stock, nie wróci nigdy więcej.
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ─── SEKCJA 5: KOLABORACJA ─── -->
+<section id="collab">
+  <div class="collab-inner">
+    <h2>Współtworzymy<br>razem.</h2>
+    <p>
+      PRIZM BRAND jest otwarty na kolaboracje z brandami, artystami i twórcami, którzy rozumieją co to znaczy tworzyć z pasją. Nie szukamy partnerów biznesowych — szukamy ludzi z wizją.
+    </p>
+    <div class="collab-cards">
+      <div class="collab-card">
+        <div class="collab-card-icon">🎨</div>
+        <h3>ARTYŚCI</h3>
+        <p>Twój artwork na naszym kroju. Limitowana edycja, pełne kredyty, wspólna sprzedaż.</p>
+      </div>
+      <div class="collab-card">
+        <div class="collab-card-icon">🏷️</div>
+        <h3>MARKI</h3>
+        <p>Cross-branding z innymi niezależnymi brandami streetwearowymi. Jeden design, dwa światy.</p>
+      </div>
+      <div class="collab-card">
+        <div class="collab-card-icon">📸</div>
+        <h3>TWÓRCY</h3>
+        <p>Fotografowie, reżyserzy, content creatorzy — chcemy budować narrację razem z Tobą.</p>
+      </div>
+    </div>
+    <button class="collab-cta" onclick="window.location='#contact'">Napisz do nas</button>
+  </div>
+</section>
+
+<!-- ─── SEKCJA 6: KONTAKT ─── -->
+<section id="contact">
+  <h2 class="fade-up">Gdzie nas<br>znajdziesz.</h2>
+  <div class="contact-grid">
+    <div class="store-info fade-up">
+      <h3>Sklep stacjonarny</h3>
+      <div class="store-address">
+        Sklep Chiński<br>BOBOWA<br>ul. Długa 7<br>38-350 Bobowa
+      </div>
+      <div class="store-hours">
+        Pon – Pt: 09:00 – 18:00<br>
+        Sob: 09:00 – 14:00<br>
+        Nd: Zamknięte<br><br>
+        Produkty dostępne wyłącznie stacjonarnie.<br>Brak sprzedaży online.
+      </div>
+    </div>
+    <div class="fade-up">
+      <div class="social-links">
+        <h3>Social media</h3>
+        <a href="#" class="social-link">
+          <span class="social-link-icon">📷</span>
+          @prizmbrand — Instagram
+        </a>
+        <a href="#" class="social-link">
+          <span class="social-link-icon">🎵</span>
+          @prizmbrand — TikTok
+        </a>
+        <a href="#" class="social-link">
+          <span class="social-link-icon">🐦</span>
+          @prizmbrand — X / Twitter
+        </a>
+        <a href="#" class="social-link">
+          <span class="social-link-icon">💬</span>
+          prizmbrand — Discord
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- AI CHAT -->
+<!-- AI CHAT -->
+<div class="ai-chat" id="aiChat">
+  <div class="ai-chat-panel" role="dialog" aria-label="PRIZM AI Chat">
+    <div class="ai-chat-header">
+      <div class="ai-chat-brand">
+        <div class="ai-chat-avatar" aria-hidden="true">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3l1.7 5.1L19 10l-5.3 1.9L12 17l-1.7-5.1L5 10l5.3-1.9L12 3z"/>
+            <path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16z"/>
+          </svg>
+        </div>
+
+        <div class="ai-chat-title">
+          <strong>PRIZM AI</strong>
+          <span class="ai-chat-status">Autorska prosta sieć neuronowa.</span>
+        </div>
+      </div>
+
+      <button class="ai-chat-close" id="aiChatClose" type="button" aria-label="Zamknij chat">×</button>
+    </div>
+
+    <div class="ai-chat-messages" id="aiChatMessages">
+      <div class="ai-msg bot">
+        Siema! Pomogę dobrać rozmiar, sprawdzić info o dropie LEGACY albo podać adres sklepu w Bobowej.
+      </div>
+    </div>
+
+    <form class="ai-chat-form" id="aiChatForm">
+      <input
+        class="ai-chat-input"
+        id="aiChatInput"
+        type="text"
+        placeholder="Napisz wiadomość..."
+        maxlength="700"
+        autocomplete="off"
+      >
+
+      <button class="ai-chat-send" id="aiChatSend" type="submit" aria-label="Wyślij wiadomość">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 2L11 13"/>
+          <path d="M22 2L15 22l-4-9-9-4 20-7z"/>
+        </svg>
+      </button>
+    </form>
+  </div>
+
+  <button class="ai-chat-toggle" id="aiChatToggle" type="button" aria-label="Otwórz AI Chat">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
+      <path d="M8 10h.01"/>
+      <path d="M12 10h.01"/>
+      <path d="M16 10h.01"/>
+    </svg>
+  </button>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <img id="footer-logo" src="" alt="PRIZM BRAND">
+  <p>© 2024 PRIZM BRAND. Wszelkie prawa zastrzeżone. Kolekcja LEGACY — LOT 001.</p>
+
+  <p style="font-size:0.6rem;">
+    Wyświetlenia: <span id="viewCount">...</span>
+  </p>
+
+  <a href="https://www.prizmpages.pl " style="text-decoration: none;"><p style="font-size:0.6rem;">Made by PRIZM PAGES</p></a>
+  
+</footer>
+
+<script>
+// ─── IMAGES ───
+const shirtSrc = 'legacy-shirt.png';
+const logoSrc = 'prizm-logo.png';
+const modelLightSrc = 'modell.png';
+const modelDarkSrc = 'modeln.png';
+const modelImg = document.getElementById('model');
+
+modelImg.src = modelLightSrc;
+
+document.getElementById('nav-logo-img').src = logoSrc;
+document.getElementById('genesis-slide-img').src = shirtSrc;
+document.getElementById('lot1-img').src = shirtSrc;
+document.getElementById('product-img').src = shirtSrc;
+document.getElementById('footer-logo').src = logoSrc;
+
+// ─── THEME ───
+const html = document.documentElement;
+const themeBtn = document.getElementById('themeBtn');
+let dark = false;
+themeBtn.addEventListener('click', () => {
+  dark = !dark;
+
+  html.setAttribute('data-theme', dark ? 'dark' : 'light');
+  themeBtn.textContent = dark ? '☽' : '☀';
+
+  modelImg.src = dark ? modelDarkSrc : modelLightSrc;
+});
+
+// ─── PAGE VIEW COUNTER ───
+async function loadViewCount() {
+  try {
+    const res = await fetch('api/view_count.php');
+    const data = await res.json();
+
+    const viewCount = document.getElementById('viewCount');
+
+    if (viewCount && data.unique_visits !== undefined) {
+      viewCount.textContent = data.unique_visits;
+    }
+  } catch (err) {
+    console.error('Nie można załadować licznika wyświetleń:', err);
+  }
+}
+
+loadViewCount();
+
+// ─── DRAWING ON PAGE ───
+const drawCanvas = document.createElement('canvas');
+drawCanvas.id = 'drawLayer';
+document.body.appendChild(drawCanvas);
+
+const drawCtx = drawCanvas.getContext('2d');
+
+let isDrawing = false;
+let lastX = 0;
+let lastY = 0;
+
+function resizeDrawCanvas() {
+  const oldCanvas = document.createElement('canvas');
+  oldCanvas.width = drawCanvas.width;
+  oldCanvas.height = drawCanvas.height;
+  oldCanvas.getContext('2d').drawImage(drawCanvas, 0, 0);
+
+  drawCanvas.width = Math.max(
+    document.body.scrollWidth,
+    document.documentElement.scrollWidth,
+    window.innerWidth
+  );
+
+  drawCanvas.height = Math.max(
+    document.body.scrollHeight,
+    document.documentElement.scrollHeight,
+    window.innerHeight
+  );
+
+  drawCtx.drawImage(oldCanvas, 0, 0);
+
+  drawCtx.lineWidth = 6;
+  drawCtx.lineCap = 'round';
+  drawCtx.lineJoin = 'round';
+
+  // Biały + mix-blend-mode: difference = kolor przeciwny do tła pod spodem
+  drawCtx.strokeStyle = '#ffffff';
+}
+
+resizeDrawCanvas();
+
+window.addEventListener('resize', resizeDrawCanvas);
+window.addEventListener('load', resizeDrawCanvas);
+
+document.addEventListener('mousedown', e => {
+  if (e.button !== 0) return;
+
+  isDrawing = true;
+  lastX = e.pageX;
+  lastY = e.pageY;
+
+  document.body.style.userSelect = 'none';
+  resizeDrawCanvas();
+});
+
+document.addEventListener('mousemove', e => {
+  if (!isDrawing) return;
+
+  drawCtx.beginPath();
+  drawCtx.moveTo(lastX, lastY);
+  drawCtx.lineTo(e.pageX, e.pageY);
+  drawCtx.stroke();
+
+  lastX = e.pageX;
+  lastY = e.pageY;
+});
+
+document.addEventListener('mouseup', () => {
+  isDrawing = false;
+  document.body.style.userSelect = '';
+});
+
+document.addEventListener('mouseleave', () => {
+  isDrawing = false;
+  document.body.style.userSelect = '';
+});
+
+// ─── AUDIO BUTTON ───
+const audioBtn = document.getElementById('audioBtn');
+const pageAudio = document.getElementById('pageAudio');
+
+audioBtn.addEventListener('click', async () => {
+  try {
+    if (pageAudio.paused) {
+      await pageAudio.play();
+      audioBtn.textContent = '❚❚';
+      audioBtn.classList.add('playing');
+      audioBtn.setAttribute('aria-label', 'Zatrzymaj audio');
+    } else {
+      pageAudio.pause();
+      audioBtn.textContent = '▶';
+      audioBtn.classList.remove('playing');
+      audioBtn.setAttribute('aria-label', 'Odtwórz audio');
+    }
+  } catch (err) {
+    console.error('Nie można odtworzyć audio:', err);
+  }
+});
+
+pageAudio.addEventListener('ended', () => {
+  audioBtn.textContent = '▶';
+  audioBtn.classList.remove('playing');
+  audioBtn.setAttribute('aria-label', 'Odtwórz audio');
+});
+
+// ─── GENESIS SLIDER ───
+let genesisIdx = 0;
+const genesisSlider = document.getElementById('genesisSlider');
+const genDots = document.querySelectorAll('.slider-dot[data-slider="genesis"]');
+
+function goGenesis(n) {
+  genesisIdx = (n + 3) % 3;
+  genesisSlider.style.transform = `translateX(-${genesisIdx * 100}%)`;
+  genDots.forEach((d, i) => d.classList.toggle('active', i === genesisIdx));
+}
+document.getElementById('genPrev').addEventListener('click', () => goGenesis(genesisIdx - 1));
+document.getElementById('genNext').addEventListener('click', () => goGenesis(genesisIdx + 1));
+genDots.forEach(d => d.addEventListener('click', () => goGenesis(+d.dataset.idx)));
+
+// ─── LOTS DRAG SLIDER ───
+const track = document.getElementById('lotsTrack');
+let isDragging = false, startX = 0, scrollLeft = 0;
+
+track.addEventListener('mousedown', e => {
+  isDragging = true;
+  track.classList.add('dragging');
+  startX = e.pageX - track.offsetLeft;
+  scrollLeft = track.parentElement.scrollLeft;
+});
+document.addEventListener('mouseup', () => {
+  isDragging = false;
+  track.classList.remove('dragging');
+});
+track.addEventListener('mousemove', e => {
+  if (!isDragging) return;
+  e.preventDefault();
+  const x = e.pageX - track.offsetLeft;
+  const walk = (x - startX) * 1.2;
+  track.parentElement.scrollLeft = scrollLeft - walk;
+});
+
+// Touch
+let touchStartX = 0;
+track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+track.addEventListener('touchmove', e => {
+  const dx = touchStartX - e.touches[0].clientX;
+  track.parentElement.scrollLeft += dx * 1.8;
+  touchStartX = e.touches[0].clientX;
+}, { passive: true });
+
+// Make the track wrapper scrollable
+
+
+// Lot click
+document.querySelectorAll('.lot-card:not(.locked)').forEach(card => {
+  card.addEventListener('click', () => {
+    document.getElementById('product').scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// ─── SIZE MODAL ───
+document.getElementById('openSizeModal').addEventListener('click', () => {
+  document.getElementById('sizeModal').classList.add('open');
+});
+document.getElementById('closeModal').addEventListener('click', () => {
+  document.getElementById('sizeModal').classList.remove('open');
+});
+document.getElementById('sizeModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('sizeModal')) {
+    document.getElementById('sizeModal').classList.remove('open');
+  }
+});
+
+// ─── FADE UP OBSERVER ───
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+
+const heartBtn = document.getElementById("heartBtn");
+const likeCount = document.getElementById("likeCount");
+
+async function loadLikes() {
+  const shirt = heartBtn.dataset.shirt;
+
+  const res = await fetch(`api/get_like.php?shirt=${encodeURIComponent(shirt)}`);
+  const data = await res.json();
+
+  likeCount.textContent = data.likes;
+
+  if (data.liked) {
+    heartBtn.classList.add("liked");
+  } else {
+    heartBtn.classList.remove("liked");
+  }
+}
+
+async function toggleLike() {
+  const shirt = heartBtn.dataset.shirt;
+
+  const formData = new FormData();
+  formData.append("shirt", shirt);
+
+  const res = await fetch("api/toggle_like.php", {
+    method: "POST",
+    body: formData
+  });
+
+  const data = await res.json();
+
+  likeCount.textContent = data.likes;
+
+  if (data.liked) {
+    heartBtn.classList.add("liked");
+  } else {
+    heartBtn.classList.remove("liked");
+  }
+}
+
+heartBtn.addEventListener("click", toggleLike);
+
+loadLikes();
+
+// globalna aktualizacja bez odświeżania strony
+setInterval(loadLikes, 5000);
+
+
+// --- AI CHAT ---
+// --- AI CHAT ---
+// --- AI CHAT BEZ AI: SŁOWA KLUCZOWE ---
+const aiChat = document.getElementById('aiChat');
+const aiChatToggle = document.getElementById('aiChatToggle');
+const aiChatClose = document.getElementById('aiChatClose');
+const aiChatForm = document.getElementById('aiChatForm');
+const aiChatInput = document.getElementById('aiChatInput');
+const aiChatSend = document.getElementById('aiChatSend');
+const aiChatMessages = document.getElementById('aiChatMessages');
+
+function addAiMessage(text, who = 'bot') {
+  const msg = document.createElement('div');
+  msg.className = `ai-msg ${who}`;
+  msg.textContent = text;
+  aiChatMessages.appendChild(msg);
+  aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
+  return msg;
+}
+
+// Usuwa polskie znaki i zmienia tekst na małe litery
+function normalizeText(text) {
+  return String(text)
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // usuwa polskie znaki
+    .replace(/[^a-z0-9\s]/g, ' ')    // usuwa znaki specjalne
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function getWords(text) {
+  return normalizeText(text)
+    .split(' ')
+    .filter(word => word.length > 1);
+}
+
+// Proste ucinanie końcówek, żeby "kupic", "kupie", "kupilem" łapało podobny sens
+function simplifyWord(word) {
+  return word
+    .replace(/(ami|ach|ego|emu|owa|owe|owy|cie|nia|nie|lem|łam|les|łaś|cie|esz|isz|ysz|ow|om|ie|em|ą|a|e|y|i|u)$/g, '');
+}
+
+// Liczy podobieństwo dwóch słów, przydatne na literówki
+function similarity(a, b) {
+  a = simplifyWord(normalizeText(a));
+  b = simplifyWord(normalizeText(b));
+
+  if (!a || !b) return 0;
+  if (a === b) return 1;
+  if (a.length < 3 || b.length < 3) return 0;
+
+  const longer = a.length > b.length ? a : b;
+  const shorter = a.length > b.length ? b : a;
+
+  if (longer.includes(shorter) && shorter.length >= 4) {
+    return 0.85;
+  }
+
+  const distance = levenshteinDistance(a, b);
+  return (longer.length - distance) / longer.length;
+}
+
+function levenshteinDistance(a, b) {
+  const matrix = [];
+
+  for (let i = 0; i <= b.length; i++) {
+    matrix[i] = [i];
+  }
+
+  for (let j = 0; j <= a.length; j++) {
+    matrix[0][j] = j;
+  }
+
+  for (let i = 1; i <= b.length; i++) {
+    for (let j = 1; j <= a.length; j++) {
+      if (b.charAt(i - 1) === a.charAt(j - 1)) {
+        matrix[i][j] = matrix[i - 1][j - 1];
+      } else {
+        matrix[i][j] = Math.min(
+          matrix[i - 1][j - 1] + 1,
+          matrix[i][j - 1] + 1,
+          matrix[i - 1][j] + 1
+        );
+      }
+    }
+  }
+
+  return matrix[b.length][a.length];
+}
+
+function getRandomReply(replies) {
+  return replies[Math.floor(Math.random() * replies.length)];
+}
+
+function scoreKeyword(userText, keyword) {
+  const text = normalizeText(userText);
+  const keywordText = normalizeText(keyword);
+
+  const userWords = getWords(text);
+  const keywordWords = getWords(keywordText);
+
+  if (!keywordText || keywordWords.length === 0) return 0;
+
+  let score = 0;
+
+  // 1. Najmocniejsze dopasowanie: całe wyrażenie znajduje się w pytaniu
+  if (text.includes(keywordText)) {
+    score += 100;
+  }
+
+  // 2. Dopasowanie wszystkich słów z frazy
+  let matchedWords = 0;
+
+  keywordWords.forEach(keywordWord => {
+    let bestWordScore = 0;
+
+    userWords.forEach(userWord => {
+      const cleanKeyword = simplifyWord(keywordWord);
+      const cleanUser = simplifyWord(userWord);
+
+      if (cleanKeyword === cleanUser) {
+        bestWordScore = Math.max(bestWordScore, 20);
+      } else if (
+        cleanKeyword.length >= 4 &&
+        cleanUser.length >= 4 &&
+        (cleanKeyword.includes(cleanUser) || cleanUser.includes(cleanKeyword))
+      ) {
+        bestWordScore = Math.max(bestWordScore, 14);
+      } else if (similarity(cleanKeyword, cleanUser) >= 0.78) {
+        bestWordScore = Math.max(bestWordScore, 10);
+      }
+    });
+
+    if (bestWordScore > 0) {
+      matchedWords++;
+      score += bestWordScore;
+    }
+  });
+
+  // 3. Bonus, jeśli pasuje większość słów z frazy
+  const matchRatio = matchedWords / keywordWords.length;
+
+  if (matchRatio === 1) {
+    score += 30;
+  } else if (matchRatio >= 0.7) {
+    score += 18;
+  } else if (matchRatio >= 0.5) {
+    score += 8;
+  }
+
+  // 4. Krótkie keywordy typu "cena", "sklep", "adres" też mają działać
+  if (keywordWords.length === 1 && matchedWords === 1) {
+    score += 15;
+  }
+
+  return score;
+}
+
+function scoreRule(userMessage, rule) {
+  let totalScore = 0;
+  let bestKeywordScore = 0;
+  let matchedKeywords = 0;
+
+  rule.keywords.forEach(keyword => {
+    const points = scoreKeyword(userMessage, keyword);
+
+    if (points > 0) {
+      matchedKeywords++;
+      totalScore += points;
+      bestKeywordScore = Math.max(bestKeywordScore, points);
+    }
+  });
+
+  // Bonus, jeśli kilka słów kluczowych z jednej kategorii pasuje naraz
+  totalScore += matchedKeywords * 8;
+
+  return {
+    score: totalScore,
+    bestKeywordScore,
+    matchedKeywords
+  };
+}
+
+function getBotReply(userMessage) {
+  let bestRule = null;
+  let bestScore = 0;
+
+  chatRules.forEach(rule => {
+    const result = scoreRule(userMessage, rule);
+
+    if (result.score > bestScore) {
+      bestScore = result.score;
+      bestRule = rule;
+    }
+  });
+
+  // Minimalny próg dopasowania.
+  // Jak dasz niżej, bot będzie częściej odpowiadał, ale może bardziej zgadywać.
+  // Jak dasz wyżej, będzie ostrożniejszy.
+  const MIN_SCORE = 25;
+
+  if (bestRule && bestScore >= MIN_SCORE) {
+    return getRandomReply(bestRule.replies);
+  }
+
+  return getRandomReply(defaultReplies);
+}
+
+// Lista gotowych odpowiedzi
+const chatRules = [
+  {
+    keywords: ['wysylka', 'wysyłka', 'dostawa', 'kurier', 'paczkomat', 'inpost', 'online', 'internet', 'zamowic online', 'zamówić online', 'kupic online', 'kupić online'],
+    replies: [
+      'Na ten moment nie ma sprzedaży online ani wysyłki. Legacy Tee kupisz tylko stacjonarnie w Bobowej.',
+      'Nie prowadzimy wysyłki ani sprzedaży internetowej — zakup tylko na miejscu w Sklep Chiński BOBOWA.'
+    ]
+  },
+  {
+    keywords: ['gdzie kupi', 'gdzie moge kupic', 'gdzie mogę kupić', 'kupic', 'kupić', 'kupie', 'kupię', 'zakup', 'sklep', 'adres', 'gdzie dostane', 'gdzie dostanę', 'gdzie odebrac', 'gdzie odebrać'],
+    replies: [
+      'Legacy Tee możesz kupić wyłącznie stacjonarnie w Sklep Chiński BOBOWA, ul. Długa 7, 38-350 Bobowa.',
+      'Zakup jest możliwy tylko na miejscu: Sklep Chiński BOBOWA, ul. Długa 7, 38-350 Bobowa.',
+      'Koszulkę kupisz stacjonarnie w Bobowej przy ul. Długiej 7.'
+    ]
+  },
+  {
+    keywords: ['lokalizacja', 'lokalizacje', 'mapa', 'maps', 'google maps', 'jak dojechac', 'jak dojechać', 'dojazd', 'bobowa', 'dluga 7', 'długa 7'],
+    replies: [
+      'Znajdziesz nas w Sklep Chiński BOBOWA, ul. Długa 7, 38-350 Bobowa.',
+      'Adres sklepu to ul. Długa 7, 38-350 Bobowa — produkty PRIZM są dostępne na miejscu.'
+    ]
+  },
+  {
+    keywords: ['cena', 'ile kosztuje', 'koszt', 'za ile', 'ile za', 'jaka cena', 'price', 'pln', 'zl', 'zł'],
+    replies: [
+      'Cena Legacy Tee to 169,99 zł.',
+      'Legacy Tee kosztuje 169,99 zł.',
+      'Koszulka z dropu LEGACY jest dostępna za 169,99 zł.'
+    ]
+  },
+  {
+    keywords: ['promocja', 'rabat', 'zniżka', 'znizka', 'kod rabatowy', 'taniej', 'negocjacja', 'obnizka', 'obniżka'],
+    replies: [
+      'Aktualnie cena Legacy Tee to 169,99 zł. Informacje o ewentualnych promocjach najlepiej sprawdzić bezpośrednio w sklepie.',
+      'Na stronie podana cena to 169,99 zł. Jeśli będzie promocja, info pojawi się osobno.'
+    ]
+  },
+  {
+    keywords: ['platnosc', 'płatność', 'karta', 'gotowka', 'gotówka', 'blik', 'terminal', 'czy karta', 'jak zaplacic', 'jak zapłacić'],
+    replies: [
+      'Zakup odbywa się stacjonarnie, więc formę płatności najlepiej potwierdzić bezpośrednio w sklepie.',
+      'Nie mam potwierdzonej listy metod płatności — najlepiej zapytać na miejscu w Sklep Chiński BOBOWA.'
+    ]
+  },
+  {
+    keywords: ['rozmiar', 'rozmiary', 'size', 'sizing', 'xl', 'lka', 'mka', 'ska', 'tabela', 'wymiary', 'jaki rozmiar'],
+    replies: [
+      'Legacy Tee jest dostępna w rozmiarach S, M, L oraz XL. Tabelę rozmiarów znajdziesz przy produkcie.',
+      'Dostępne rozmiary to S–XL. Kliknij “Tabela rozmiarów & zakup”, żeby sprawdzić wymiary.',
+      'Rozmiary Legacy Tee: S, M, L i XL.'
+    ]
+  },
+  {
+    keywords: ['oversize', 'krój', 'kroj', 'fit', 'luźna', 'luzna', 'szeroka', 'boxy', 'jak lezy', 'jak leży'],
+    replies: [
+      'Legacy Tee ma krój oversize, więc siedzi luźniej niż klasyczny T-shirt.',
+      'To oversize T-shirt — jeśli wolisz bardziej dopasowany fit, sprawdź dokładnie tabelę wymiarów.'
+    ]
+  },
+  {
+    keywords: ['klatka', 'szerokosc', 'szerokość', 'dlugosc', 'długość', 'cm', 'centymetry'],
+    replies: [
+      'Wymiary znajdziesz w tabeli rozmiarów przy produkcie: S, M, L i XL mają podaną klatkę oraz długość w cm.',
+      'Kliknij “Tabela rozmiarów & zakup” — tam są podane dokładne wymiary koszulki.'
+    ]
+  },
+  {
+    keywords: ['material', 'materiał', 'bawełna', 'bawelna', 'sklad', 'skład', 'z czego', 'fabric'],
+    replies: [
+      'Legacy Tee jest wykonana ze 100% bawełny.',
+      'Materiał koszulki to 100% bawełna.',
+      'Skład Legacy Tee: 100% bawełna.'
+    ]
+  },
+  {
+    keywords: ['kolor', 'barwa', 'biały', 'bialy', 'czarny', 'print', 'nadruk'],
+    replies: [
+      'Legacy Tee jest biała z czarnym printem.',
+      'Kolor produktu: biały T-shirt z czarnym nadrukiem.'
+    ]
+  },
+  {
+    keywords: ['dostepnosc', 'dostępność', 'czy jest', 'czy sa', 'czy są', 'stock', 'zapas', 'zapasów', 'zapasow'],
+    replies: [
+      'Legacy Tee jest dostępna do wyczerpania zapasów. Najpewniej sprawdzisz dostępność bezpośrednio na miejscu.',
+      'Drop jest limitowany, więc dostępność zależy od aktualnego stocku w sklepie.'
+    ]
+  },
+  {
+    keywords: ['limitowana', 'limitowany', 'limited', 'drop', 'legacy', 'kiedy wróci', 'kiedy wroci', 'restock', 'ponownie', 'wroci', 'wróci'],
+    replies: [
+      'Kolekcja LEGACY jest limitowana. Gdy stock się skończy, drop nie wróci ponownie.',
+      'LEGACY to jednorazowy drop — po wyczerpaniu zapasów nie będzie restocku.',
+      'Ten drop jest limitowany i po wyprzedaniu nie wraca.'
+    ]
+  },
+  {
+    keywords: ['godziny', 'otwarte', 'kiedy otwarte', 'czynne', 'godzina', 'do ktorej', 'do której', 'otwarcia'],
+    replies: [
+      'Sklep jest otwarty od poniedziałku do piątku 09:00–18:00, w sobotę 09:00–14:00, a w niedzielę zamknięte.',
+      'Godziny otwarcia: pon–pt 09:00–18:00, sobota 09:00–14:00, niedziela zamknięte.'
+    ]
+  },
+  {
+    keywords: ['niedziela', 'nd', 'w niedziele', 'w niedzielę'],
+    replies: [
+      'W niedzielę sklep jest zamknięty.',
+      'Niedziela: zamknięte.'
+    ]
+  },
+  {
+    keywords: ['sobota', 'sobote', 'sobotę', 'weekend'],
+    replies: [
+      'W sobotę sklep jest otwarty 09:00–14:00.',
+      'Sobota: 09:00–14:00. W niedzielę sklep jest zamknięty.'
+    ]
+  },
+  {
+    keywords: ['poniedzialek', 'poniedziałek', 'wtorek', 'sroda', 'środa', 'czwartek', 'piatek', 'piątek', 'pon pt', 'pon-pt'],
+    replies: [
+      'Od poniedziałku do piątku sklep jest otwarty 09:00–18:00.',
+      'W tygodniu, od poniedziałku do piątku, sklep działa w godzinach 09:00–18:00.'
+    ]
+  },
+  {
+    keywords: ['kontakt', 'napisac', 'napisać', 'wiadomosc', 'wiadomość', 'instagram', 'tiktok', 'social', 'discord', 'x twitter', 'twitter'],
+    replies: [
+      'Social media PRIZM BRAND znajdziesz w sekcji kontakt na stronie.',
+      'Najłatwiej złapać nas przez social media podane w sekcji Kontakt.',
+      'Kontakt i social media są dostępne na dole strony.'
+    ]
+  },
+  {
+    keywords: ['wspolpraca', 'współpraca', 'collab', 'kolaboracja', 'kolabo', 'partnerstwo', 'artysta', 'artysci', 'artyści', 'tworca', 'twórca', 'marka'],
+    replies: [
+      'PRIZM BRAND jest otwarty na kolaboracje z artystami, twórcami i markami z wizją.',
+      'Jeśli chcesz zrobić collab, przejdź do sekcji Kontakt i odezwij się przez social media.'
+    ]
+  },
+  {
+    keywords: ['polska', 'polski', 'polskie', 'marka', 'marki', 'produkt', 'dostawc', 'lokalni', 'lokalna'],
+    replies: [
+      'Tak, PRIZM BRAND to polska marka odzieżowa korzystająca z lokalnych dostawców.',
+      'PRIZM BRAND to polska marka, która opiera się na lokalnym podejściu i autentycznej wizji.'
+    ]
+  },
+  {
+    keywords: ['siema', 'hej', 'czesc', 'cześć', 'elo', 'witam', 'hejka', 'yo', 'dzień dobry', 'dzien dobry'],
+    replies: [
+      'Siema! Mogę pomóc z ceną, rozmiarem, adresem sklepu albo informacją o dropie LEGACY.',
+      'Hej! Zapytaj mnie o zakup, cenę, rozmiar albo dostępność Legacy Tee.',
+      'Cześć! Mogę podać info o koszulce, sklepie, rozmiarach i dropie.'
+    ]
+  },
+  {
+    keywords: ['dzieki', 'dzięki', 'dziekuje', 'dziękuję', 'thx', 'thanks'],
+    replies: [
+      'Nie ma sprawy!',
+      'Luz, w razie czego pytaj dalej.',
+      'Spoko — jestem tu od info o PRIZM BRAND.'
+    ]
+  },
+  {
+    keywords: ['pa', 'nara', 'do widzenia', 'trzymaj sie', 'trzymaj się', 'bye'],
+    replies: [
+      'Do zobaczenia!',
+      'Narka, wpadaj sprawdzić LEGACY na miejscu.',
+      'Trzymaj się!'
+    ]
+  },
+  {
+    keywords: ['kim jestescie', 'kim jesteście', 'co to prizm', 'prizm brand', 'o marce', 'brand'],
+    replies: [
+      'PRIZM BRAND to polska marka odzieżowa tworzona wokół kultury, autentyczności i limitowanych dropów.',
+      'PRIZM BRAND to niezależny brand streetwearowy oparty na wizji, historii i limitowanych kolekcjach.'
+    ]
+  },
+  {
+    keywords: ['co to legacy', 'legacy tee', 'kolekcja legacy', 'drop legacy'],
+    replies: [
+      'LEGACY Tee to pierwszy oficjalny drop PRIZM BRAND — limitowana koszulka dostępna tylko stacjonarnie.',
+      'LEGACY to jednorazowy drop PRIZM BRAND. Gdy stock się skończy, kolekcja nie wróci.'
+    ]
+  },
+  {
+    keywords: ['lot 001', 'lot001', 'pierwszy lot', 'pierwszy drop'],
+    replies: [
+      'LOT 001 to LEGACY — pierwszy oficjalny drop PRIZM BRAND.',
+      'Pierwszy lot PRIZM BRAND to LEGACY Tee.'
+    ]
+  },
+  {
+    keywords: ['loty', 'lot', 'kolejne loty', 'następny lot', 'nastepny lot', 'lot 002', 'lot 2'],
+    replies: [
+      'Każdy lot to osobny rozdział historii PRIZM. Kolejne dropy będą ogłaszane osobno.',
+      'Aktualne i przyszłe loty możesz sprawdzić w sekcji LOTY na stronie.'
+    ]
+  },
+  {
+    keywords: ['don\'t be chump', 'dont be chump', 'chump', 'lot 006', 'lot 6'],
+    replies: [
+      'LOT 006 to DON’T BE CHUMP — znajdziesz go w sekcji LOTY.',
+      'DON’T BE CHUMP jest jednym z aktywnych lotów pokazanych na stronie.'
+    ]
+  },
+  {
+    keywords: ['circvs maximvs', 'circus maximus', 'cir', 'lot 010', 'lot 10'],
+    replies: [
+      'LOT 010 to CIRCVS MAXIMVS — możesz go zobaczyć w sekcji LOTY.',
+      'CIRCVS MAXIMVS to jeden z aktywnych lotów PRIZM pokazanych na stronie.'
+    ]
+  },
+  {
+    keywords: ['alighieri', 'dante', 'lot 043', 'lot 43'],
+    replies: [
+      'LOT 043 to ALIGHIERI — znajdziesz go w sekcji LOTY.',
+      'ALIGHIERI to jeden z lotów pokazanych na stronie PRIZM BRAND.'
+    ]
+  },
+  {
+    keywords: ['zdjecia', 'zdjęcia', 'model', 'foto', 'fotki', 'lookbook'],
+    replies: [
+      'Zdjęcia produktu i modelu znajdziesz na stronie w sekcji głównej oraz przy produkcie.',
+      'Sprawdź sekcję produktu i hero — tam pokazana jest koszulka LEGACY.'
+    ]
+  },
+  {
+    keywords: ['ciemny motyw', 'jasny motyw', 'dark mode', 'light mode', 'motyw', 'tryb ciemny', 'tryb jasny'],
+    replies: [
+      'Motyw strony możesz zmienić przyciskiem w prawym górnym rogu.',
+      'Kliknij ikonę słońca lub księżyca w nawigacji, żeby zmienić motyw strony.'
+    ]
+  },
+  {
+    keywords: ['rezerwacja', 'zarezerwowac', 'zarezerwować', 'odlozyc', 'odłożyć', 'odkladanie', 'odkładanie'],
+    replies: [
+      'Nie mam informacji o rezerwacjach. Najlepiej zapytać bezpośrednio na miejscu w sklepie.',
+      'Rezerwację lub odłożenie produktu najlepiej ustalić bezpośrednio w Sklep Chiński BOBOWA.'
+    ]
+  },
+  {
+    keywords: ['zwrot', 'zwroty', 'reklamacja', 'wymiana', 'oddac', 'oddać'],
+    replies: [
+      'W sprawie zwrotu, wymiany albo reklamacji najlepiej zapytać bezpośrednio w sklepie przy zakupie.',
+      'Nie mam pełnych zasad zwrotów — szczegóły najlepiej potwierdzić na miejscu.'
+    ]
+  },
+  {
+    keywords: ['przymierzyc', 'przymierzyć', 'przymierzalnia', 'mierzyc', 'mierzyć'],
+    replies: [
+      'Możliwość przymierzenia najlepiej sprawdzić bezpośrednio w sklepie na miejscu.',
+      'Zapytaj w sklepie, czy możesz przymierzyć dostępny rozmiar.'
+    ]
+  },
+  {
+    keywords: ['jak prac', 'jak prać', 'pranie', 'prac', 'prać', 'suszyc', 'suszyć'],
+    replies: [
+      'Najbezpieczniej prać koszulkę delikatnie i zgodnie z metką produktu.',
+      'Sprawdź metkę na koszulce — tam znajdziesz najważniejsze zasady prania.'
+    ]
+  },
+  {
+    keywords: ['kurczy', 'skurczy', 'czy sie kurczy', 'czy się kurczy'],
+    replies: [
+      'Nie mam potwierdzonej informacji o kurczeniu materiału. Najlepiej prać zgodnie z metką.',
+      'Koszulka jest ze 100% bawełny, więc warto trzymać się zaleceń z metki.'
+    ]
+  },
+  {
+    keywords: ['gramatura', 'gruby material', 'gruby materiał', 'ciezki', 'ciężki'],
+    replies: [
+      'Nie mam podanej dokładnej gramatury. Wiadomo, że Legacy Tee jest wykonana ze 100% bawełny.',
+      'Gramatura nie jest podana na stronie, ale materiał to 100% bawełna.'
+    ]
+  },
+  {
+    keywords: ['unisex', 'damska', 'meska', 'męska', 'dla kobiet', 'dla mezczyzn', 'dla mężczyzn'],
+    replies: [
+      'Legacy Tee ma krój oversize, więc może pasować różnym osobom — najlepiej sprawdzić tabelę wymiarów.',
+      'To oversize T-shirt. Dobierz rozmiar po wymiarach, nie tylko po standardowej rozmiarówce.'
+    ]
+  },
+  {
+    keywords: ['prezent', 'na prezent', 'dla kogos', 'dla kogoś'],
+    replies: [
+      'Legacy Tee może być dobrym prezentem, ale najlepiej znać rozmiar osoby albo sprawdzić tabelę wymiarów.',
+      'Na prezent najlepiej wybrać rozmiar po tabeli — koszulka ma oversize fit.'
+    ]
+  },
+  {
+    keywords: ['ile sztuk', 'naklad', 'nakład', 'liczba sztuk', 'sztuki'],
+    replies: [
+      'Drop jest limitowany, ale dokładna liczba sztuk nie jest podana na stronie.',
+      'Nie mam podanej liczby sztuk. Wiadomo, że kolekcja jest dostępna tylko do wyczerpania zapasów.'
+    ]
+  },
+  {
+    keywords: ['kiedy premiera', 'premiera', 'data dropu', 'kiedy drop'],
+    replies: [
+      'Informacje o kolejnych dropach będą ogłaszane osobno.',
+      'Aktualnie na stronie pokazany jest drop LEGACY. Kolejne premiery będą komunikowane oddzielnie.'
+    ]
+  },
+  {
+    keywords: ['nowy drop', 'nastepny drop', 'następny drop', 'co dalej', 'kolekcja następna', 'kolekcja nastepna'],
+    replies: [
+      'Następny drop zostanie ogłoszony osobno. Śledź sekcję kontakt i social media PRIZM BRAND.',
+      'Kolejne dropy będą komunikowane oddzielnie — najlepiej obserwować social media PRIZM.'
+    ]
+  },
+  {
+    keywords: ['newsletter', 'mailing', 'powiadomienie', 'powiadomienia'],
+    replies: [
+      'Na stronie nie ma aktualnie newslettera. Najlepiej śledzić PRIZM BRAND w social media.',
+      'Powiadomienia o dropach najłatwiej łapać przez social media PRIZM BRAND.'
+    ]
+  },
+  {
+    keywords: ['telefon', 'numer telefonu', 'zadzwonic', 'zadzwonić'],
+    replies: [
+      'Na stronie nie ma podanego numeru telefonu. Skorzystaj z social media w sekcji Kontakt.',
+      'Nie mam numeru telefonu — kontakt znajdziesz przez social media PRIZM BRAND.'
+    ]
+  },
+  {
+    keywords: ['email', 'mail', 'e-mail'],
+    replies: [
+      'Na stronie nie widzę podanego maila. Najlepiej skorzystać z social media w sekcji Kontakt.',
+      'Kontakt najlepiej złapać przez social media PRIZM BRAND.'
+    ]
+  },
+  {
+    keywords: ['hurt', 'hurtowo', 'większa ilość', 'wieksza ilosc', 'bulk'],
+    replies: [
+      'W sprawie większej ilości najlepiej odezwać się przez social media PRIZM BRAND.',
+      'Jeśli chodzi o większą ilość sztuk, napisz przez social media z sekcji Kontakt.'
+    ]
+  },
+  {
+    keywords: ['custom', 'personalizacja', 'wlasny nadruk', 'własny nadruk', 'wlasny projekt', 'własny projekt'],
+    replies: [
+      'PRIZM jest otwarty na kreatywne kolaboracje, ale personalizację najlepiej ustalić przez kontakt bezpośredni.',
+      'W sprawie własnych projektów i kolaboracji odezwij się przez social media PRIZM BRAND.'
+    ]
+  },
+  {
+    keywords: ['logo', 'znak', 'prizm logo'],
+    replies: [
+      'Logo PRIZM BRAND znajdziesz w górnej części strony i w stopce.',
+      'Logo PRIZM jest częścią identyfikacji marki pokazanej na stronie.'
+    ]
+  },
+  {
+    keywords: ['made by', 'prizm pages', 'strona', 'kto zrobil', 'kto zrobił'],
+    replies: [
+      'Strona została wykonana przez PRIZM PAGES.',
+      'Za stronę odpowiada PRIZM PAGES.'
+    ]
+  },
+  {
+    keywords: ['asap bari', 'vlone', 'inspiracja', 'geneza', 'historia'],
+    replies: [
+      'Geneza PRIZM BRAND zaczęła się od inspiracji kulturą uliczną i chęci stworzenia własnego dziedzictwa.',
+      'Historię marki znajdziesz w sekcji Geneza — od marzenia do pierwszego dropu.'
+    ]
+  },
+  {
+    keywords: ['chiny', 'krawiec', 'mistrz krawiecki', 'kolaboracja z chin'],
+    replies: [
+      'W genezie marki wspomniana jest niespodziewana kolaboracja z mistrzem krawieckim z Chin.',
+      'To część historii PRIZM BRAND opisana w sekcji Geneza.'
+    ]
+  },
+  {
+    keywords: ['czy warto', 'warto kupic', 'warto kupić', 'polecasz'],
+    replies: [
+      'Jeśli lubisz limitowane dropy i oversize streetwear, Legacy Tee zdecydowanie pasuje do tego klimatu.',
+      'LEGACY jest jednorazowym dropem, więc jeśli siedzi Ci design, nie ma co czekać na restock.'
+    ]
+  },
+  {
+    keywords: ['dla mnie', 'jaki wybrac', 'jaki wybrać', 'pomoz wybrac', 'pomóż wybrać'],
+    replies: [
+      'Najlepiej wybierz rozmiar po tabeli wymiarów. Legacy Tee ma oversize fit, więc sprawdź klatkę i długość.',
+      'Dobierz rozmiar po wymiarach z tabeli — przy oversize to najpewniejsza opcja.'
+    ]
+  },
+  {
+    keywords: ['mam 170', 'mam 175', 'mam 180', 'mam 185', 'wzrost', 'waga'],
+    replies: [
+      'Nie dobiorę idealnie rozmiaru po samym wzroście i wadze. Najlepiej porównać swoją koszulkę z tabelą wymiarów.',
+      'Sprawdź klatkę i długość w tabeli rozmiarów — to będzie dokładniejsze niż sam wzrost.'
+    ]
+  },
+  {
+    keywords: ['s rozmiar', 'rozmiar s', 'size s'],
+    replies: [
+      'Rozmiar S ma klatkę 96–100 cm i długość 68 cm.',
+      'S: klatka 96–100 cm, długość 68 cm.'
+    ]
+  },
+  {
+    keywords: ['m rozmiar', 'rozmiar m', 'size m'],
+    replies: [
+      'Rozmiar M ma klatkę 100–104 cm i długość 71 cm.',
+      'M: klatka 100–104 cm, długość 71 cm.'
+    ]
+  },
+  {
+    keywords: ['l rozmiar', 'rozmiar l', 'size l'],
+    replies: [
+      'Rozmiar L ma klatkę 104–110 cm i długość 74 cm.',
+      'L: klatka 104–110 cm, długość 74 cm.'
+    ]
+  },
+  {
+    keywords: ['xl rozmiar', 'rozmiar xl', 'size xl'],
+    replies: [
+      'Rozmiar XL ma klatkę 110–116 cm i długość 77 cm.',
+      'XL: klatka 110–116 cm, długość 77 cm.'
+    ]
+  },
+  {
+    keywords: ['najmniejszy', 'najmniejsza', 'najmniejszy rozmiar'],
+    replies: [
+      'Najmniejszy dostępny rozmiar Legacy Tee to S.',
+      'Legacy Tee zaczyna się od rozmiaru S.'
+    ]
+  },
+  {
+    keywords: ['najwiekszy', 'największy', 'najwieksza', 'największa', 'najwiekszy rozmiar', 'największy rozmiar'],
+    replies: [
+      'Największy dostępny rozmiar Legacy Tee to XL.',
+      'Legacy Tee jest dostępna maksymalnie w rozmiarze XL.'
+    ]
+  },
+  {
+    keywords: ['dzieci', 'dzieciecy', 'dziecięcy', 'xs', 'xxl'],
+    replies: [
+      'Na stronie podane są tylko rozmiary S, M, L oraz XL.',
+      'Aktualna rozmiarówka Legacy Tee to S–XL.'
+    ]
+  },
+  {
+    keywords: ['czarna koszulka', 'czarny tshirt', 'czarny t-shirt'],
+    replies: [
+      'Legacy Tee jest dostępna jako biały T-shirt z czarnym printem.',
+      'Na stronie pokazany jest wariant biały z czarnym nadrukiem.'
+    ]
+  },
+  {
+    keywords: ['biała koszulka', 'biala koszulka', 'biały tshirt', 'bialy tshirt'],
+    replies: [
+      'Tak, Legacy Tee to biały T-shirt z czarnym printem.',
+      'Kolor Legacy Tee: biały z czarnym nadrukiem.'
+    ]
+  },
+  {
+    keywords: ['inne kolory', 'inny kolor', 'warianty kolorystyczne'],
+    replies: [
+      'Na stronie podany jest wariant biały z czarnym printem.',
+      'Aktualnie pokazany wariant Legacy Tee to biały T-shirt z czarnym nadrukiem.'
+    ]
+  },
+  {
+    keywords: ['bluza', 'hoodie', 'spodnie', 'czapka', 'akcesoria'],
+    replies: [
+      'Na tej stronie głównym produktem jest Legacy Tee.',
+      'Aktualnie prezentowany produkt to Legacy Tee — oversize T-shirt.'
+    ]
+  },
+  {
+    keywords: ['czy oryginalne', 'oryginalne', 'fake', 'podrobka', 'podróbka'],
+    replies: [
+      'Legacy Tee dostępna na miejscu w Sklep Chiński BOBOWA pochodzi z dropu PRIZM BRAND.',
+      'Najpewniejszy zakup to zakup stacjonarny w miejscu wskazanym na stronie.'
+    ]
+  },
+  {
+    keywords: ['bezpieczne', 'bezpieczenstwo', 'bezpieczeństwo'],
+    replies: [
+      'Zakup odbywa się stacjonarnie w sklepie wskazanym na stronie.',
+      'Najbezpieczniej kupić produkt osobiście w Sklep Chiński BOBOWA.'
+    ]
+  },
+  {
+    keywords: ['czy moge obejrzec', 'czy mogę obejrzeć', 'zobaczyc na zywo', 'zobaczyć na żywo'],
+    replies: [
+      'Tak, produkt możesz zobaczyć stacjonarnie w Sklep Chiński BOBOWA.',
+      'Legacy Tee jest dostępna na miejscu, więc możesz sprawdzić ją bezpośrednio w sklepie.'
+    ]
+  },
+  {
+    keywords: ['produkt dostępny', 'produkt dostepny', 'czy koszulka jest'],
+    replies: [
+      'Dostępność zależy od aktualnego stocku w sklepie. Drop jest limitowany.',
+      'Koszulka jest dostępna do wyczerpania zapasów — najlepiej sprawdzić na miejscu.'
+    ]
+  },
+  {
+    keywords: ['ile zostalo', 'ile zostało', 'ostatnie sztuki'],
+    replies: [
+      'Nie mam podglądu aktualnego stocku. Najlepiej sprawdzić dostępność bezpośrednio w sklepie.',
+      'Stan magazynowy najlepiej potwierdzić na miejscu w Sklep Chiński BOBOWA.'
+    ]
+  },
+  {
+    keywords: ['czy daleko', 'gdzie to jest', 'miejscowosc', 'miejscowość'],
+    replies: [
+      'Sklep znajduje się w Bobowej, przy ul. Długiej 7.',
+      'To Bobowa, adres: ul. Długa 7, 38-350 Bobowa.'
+    ]
+  },
+  {
+    keywords: ['brak sprzedaży online', 'brak sprzedazy online'],
+    replies: [
+      'Tak, na ten moment zakup jest możliwy tylko stacjonarnie.',
+      'Zgadza się — brak sprzedaży online, tylko zakup na miejscu.'
+    ]
+  },
+  {
+    keywords: ['czy wyslecie', 'czy wyślecie', 'mozna wyslac', 'można wysłać'],
+    replies: [
+      'Na ten moment nie realizujemy wysyłki. Zakup tylko stacjonarnie w Bobowej.',
+      'Nie ma opcji wysyłki — Legacy Tee kupisz wyłącznie na miejscu.'
+    ]
+  },
+  {
+    keywords: ['reklama', 'promowac', 'promować', 'wspolna akcja', 'wspólna akcja'],
+    replies: [
+      'W sprawie promocji lub wspólnej akcji najlepiej odezwać się przez social media PRIZM BRAND.',
+      'PRIZM jest otwarty na działania z twórcami — napisz przez social media.'
+    ]
+  },
+  {
+    keywords: ['fotograf', 'sesja', 'zdjęciowa', 'zdjeciowa', 'content creator', 'rezyser', 'reżyser'],
+    replies: [
+      'PRIZM BRAND jest otwarty na współpracę z fotografami, reżyserami i twórcami contentu.',
+      'Jeśli chcesz stworzyć content dla PRIZM, odezwij się przez social media z sekcji Kontakt.'
+    ]
+  },
+  {
+    keywords: ['artwork', 'grafika', 'projekt graficzny', 'designer', 'grafik'],
+    replies: [
+      'PRIZM jest otwarty na kolaboracje z artystami i grafikami z własną wizją.',
+      'W sprawie artworku lub projektu napisz przez social media PRIZM BRAND.'
+    ]
+  },
+  {
+    keywords: ['streetwear', 'ulica', 'kultura uliczna'],
+    replies: [
+      'PRIZM BRAND wyrasta z klimatu streetwearu, kultury i autentycznej historii.',
+      'To brand oparty na ulicznym klimacie, limitowanych dropach i własnej wizji.'
+    ]
+  },
+  {
+    keywords: ['filozofia', 'wizja', 'dziedzictwo'],
+    replies: [
+      'PRIZM BRAND to nie tylko ubrania — to wizja, historia i dziedzictwo zamknięte w dropach.',
+      'LEGACY powstało jako symbol zostawienia po sobie czegoś więcej niż zwykły produkt.'
+    ]
+  },
+  {
+    keywords: ['kopiuje', 'kopiujecie', 'inspirujecie'],
+    replies: [
+      'PRIZM nie kopiuje kultury — tworzy własną narrację i własne dropy.',
+      'Inspiracja kulturą uliczną jest częścią historii, ale PRIZM buduje własną tożsamość.'
+    ]
+  },
+  {
+    keywords: ['problem', 'blad', 'błąd', 'nie dziala', 'nie działa', 'strona nie działa'],
+    replies: [
+      'Jeśli coś nie działa na stronie, odśwież ją albo spróbuj ponownie za chwilę.',
+      'Może to chwilowy błąd strony. Odśwież i sprawdź jeszcze raz.'
+    ]
+  },
+  {
+    keywords: ['chat', 'bot', 'ai', 'sztuczna inteligencja'],
+    replies: [
+      'To prosty PRIZM bot od szybkich odpowiedzi o dropie, sklepie i produkcie.',
+      'Nie jestem prawdziwym AI — odpowiadam na podstawie gotowych informacji o PRIZM BRAND.'
+    ]
+  },
+  {
+    keywords: ['co umiesz', 'w czym pomagasz', 'pomoc', 'help'],
+    replies: [
+      'Mogę pomóc z ceną, rozmiarem, materiałem, adresem sklepu, godzinami otwarcia i dostępnością.',
+      'Zapytaj mnie o Legacy Tee, zakup, rozmiary, cenę, drop albo kontakt.'
+    ]
+  },
+  {
+    keywords: ['nie rozumiem', 'o co chodzi', 'wyjasnij', 'wyjaśnij'],
+    replies: [
+      'LEGACY Tee to limitowany T-shirt PRIZM BRAND za 169,99 zł, dostępny tylko stacjonarnie w Bobowej.',
+      'Najprościej: PRIZM wypuścił limitowaną koszulkę Legacy Tee, którą kupisz tylko na miejscu.'
+    ]
+  },
+  {
+    keywords: ['czy jest tanio', 'drogo', 'za drogo'],
+    replies: [
+      'Cena Legacy Tee to 169,99 zł. To limitowany drop PRIZM BRAND.',
+      'Koszulka kosztuje 169,99 zł i jest częścią limitowanej kolekcji LEGACY.'
+    ]
+  },
+  {
+    keywords: ['jakość', 'jakosc', 'quality'],
+    replies: [
+      'Na stronie podany materiał to 100% bawełna i oversize krój.',
+      'Legacy Tee to oversize T-shirt wykonany ze 100% bawełny.'
+    ]
+  },
+  {
+    keywords: ['metka', 'etykieta', 'label'],
+    replies: [
+      'Szczegóły pielęgnacji i produktu najlepiej sprawdzić na metce koszulki.',
+      'Metka produktu powinna zawierać najważniejsze informacje o pielęgnacji.'
+    ]
+  },
+  {
+    keywords: ['czy moge zamowic', 'czy mogę zamówić', 'zamówienie', 'zamowienie'],
+    replies: [
+      'Nie ma zamówień online. Zakup Legacy Tee odbywa się tylko stacjonarnie.',
+      'Legacy Tee nie jest dostępna na zamówienie przez internet — kupisz ją na miejscu.'
+    ]
+  },
+  {
+    keywords: ['odbior osobisty', 'odbiór osobisty'],
+    replies: [
+      'Tak, zakup odbywa się stacjonarnie na miejscu w Bobowej.',
+      'Produkt jest dostępny tylko stacjonarnie, więc odbiór jest bezpośrednio w sklepie.'
+    ]
+  },
+  {
+    keywords: ['czy jest paragon', 'paragon', 'faktura'],
+    replies: [
+      'W sprawie paragonu lub faktury najlepiej zapytać bezpośrednio w sklepie.',
+      'Kwestie paragonu i faktury potwierdzisz na miejscu podczas zakupu.'
+    ]
+  },
+  {
+    keywords: ['czy mozna placic blikiem', 'czy można płacić blikiem', 'blik'],
+    replies: [
+      'Nie mam potwierdzonej informacji o BLIK-u. Najlepiej zapytać bezpośrednio w sklepie.',
+      'Formy płatności, w tym BLIK, najlepiej potwierdzić na miejscu.'
+    ]
+  },
+  {
+    keywords: ['czy mozna karta', 'czy można kartą', 'karta platnicza', 'karta płatnicza'],
+    replies: [
+      'Nie mam potwierdzonej informacji o płatności kartą. Najlepiej zapytać w sklepie.',
+      'Formę płatności kartą warto potwierdzić bezpośrednio na miejscu.'
+    ]
+  },
+  {
+    keywords: ['czy tylko gotowka', 'czy tylko gotówka'],
+    replies: [
+      'Nie mam potwierdzonej informacji o metodach płatności. Najlepiej zapytać w sklepie.',
+      'Płatność najlepiej ustalić bezpośrednio w Sklep Chiński BOBOWA.'
+    ]
+  },
+  {
+    keywords: ['czy mozna oddac', 'czy można oddać', 'czy moge oddac', 'czy mogę oddać'],
+    replies: [
+      'Zasady zwrotu najlepiej potwierdzić bezpośrednio w sklepie przed zakupem.',
+      'W sprawie oddania produktu zapytaj obsługę sklepu na miejscu.'
+    ]
+  },
+  {
+    keywords: ['czy moge wymienic', 'czy mogę wymienić', 'wymienic rozmiar', 'wymienić rozmiar'],
+    replies: [
+      'Wymianę rozmiaru najlepiej ustalić bezpośrednio w sklepie.',
+      'Nie mam pełnych zasad wymiany — zapytaj na miejscu podczas zakupu.'
+    ]
+  },
+  {
+    keywords: ['czy jest damska', 'czy jest meska', 'czy jest męska'],
+    replies: [
+      'Legacy Tee to oversize T-shirt — najlepiej dobrać rozmiar po tabeli wymiarów.',
+      'Produkt ma oversize krój, więc może pasować różnym osobom.'
+    ]
+  },
+  {
+    keywords: ['czy jest na lato', 'na lato', 'letnia'],
+    replies: [
+      'Legacy Tee to T-shirt ze 100% bawełny, więc dobrze pasuje jako codzienny streetwear.',
+      'To bawełniany oversize T-shirt — sprawdzi się w codziennych stylówkach.'
+    ]
+  },
+  {
+    keywords: ['stylizacja', 'z czym nosic', 'z czym nosić', 'outfit'],
+    replies: [
+      'Legacy Tee najlepiej siada w oversize stylówkach: jeansy, cargo, szerokie spodnie albo proste sneakersy.',
+      'To biały oversize T-shirt z czarnym printem, więc łatwo go połączyć z ciemnym dołem.'
+    ]
+  },
+  {
+    keywords: ['czy pasuje do', 'pasuje do'],
+    replies: [
+      'Biały T-shirt z czarnym printem jest bardzo uniwersalny, szczególnie do streetwearowych outfitów.',
+      'Legacy Tee pasuje do prostych, luźnych stylówek i ciemnych dodatków.'
+    ]
+  },
+  {
+    keywords: ['instagram jaki', 'jaki instagram', 'ig'],
+    replies: [
+      'Instagram PRIZM BRAND znajdziesz w sekcji Kontakt na stronie.',
+      'Sprawdź sekcję Kontakt — tam są social media PRIZM BRAND.'
+    ]
+  },
+  {
+    keywords: ['tiktok jaki', 'jaki tiktok'],
+    replies: [
+      'TikTok PRIZM BRAND znajdziesz w sekcji Kontakt.',
+      'Social media, w tym TikTok, są podane w sekcji Kontakt.'
+    ]
+  },
+  {
+    keywords: ['discord jaki', 'jaki discord'],
+    replies: [
+      'Discord PRIZM BRAND jest podany w sekcji Kontakt na stronie.',
+      'Sprawdź sekcję Kontakt — tam znajdziesz Discord PRIZM BRAND.'
+    ]
+  },
+  {
+    keywords: ['x jaki', 'twitter jaki', 'jaki x'],
+    replies: [
+      'X / Twitter PRIZM BRAND znajdziesz w sekcji Kontakt.',
+      'Social media PRIZM, w tym X / Twitter, są w sekcji Kontakt.'
+    ]
+  },
+  {
+    keywords: ['czy moge napisac na instagramie', 'czy mogę napisać na instagramie'],
+    replies: [
+      'Tak, najlepiej odezwać się przez social media PRIZM BRAND.',
+      'Jasne — social media są najlepszą opcją kontaktu.'
+    ]
+  },
+  {
+    keywords: ['czy to sklep chinski', 'czy to sklep chiński'],
+    replies: [
+      'Tak, zakup Legacy Tee odbywa się stacjonarnie w Sklep Chiński BOBOWA.',
+      'Miejsce zakupu to Sklep Chiński BOBOWA przy ul. Długiej 7.'
+    ]
+  },
+  {
+    keywords: ['bobowa gdzie', 'gdzie bobowa'],
+    replies: [
+      'Produkt kupisz w Bobowej przy ul. Długiej 7.',
+      'Adres sklepu: ul. Długa 7, 38-350 Bobowa.'
+    ]
+  },
+  {
+    keywords: ['czy jest w krakowie', 'krakow', 'kraków', 'warszawa', 'tarnow', 'tarnów', 'nowy sacz', 'nowy sącz'],
+    replies: [
+      'Na stronie podany jest tylko punkt stacjonarny w Bobowej przy ul. Długiej 7.',
+      'Aktualnie wskazany sklep znajduje się w Bobowej — nie ma podanych innych lokalizacji.'
+    ]
+  },
+  {
+    keywords: ['czy wysylacie za granice', 'czy wysyłacie za granicę', 'zagranica', 'europa'],
+    replies: [
+      'Na ten moment nie ma wysyłki, także zagranicznej. Zakup tylko stacjonarnie w Bobowej.',
+      'Brak wysyłki — produkt dostępny wyłącznie na miejscu.'
+    ]
+  },
+  {
+    keywords: ['czy mozna kupic kilka', 'czy można kupić kilka', 'kilka sztuk'],
+    replies: [
+      'Możliwość zakupu kilku sztuk zależy od aktualnego stocku w sklepie.',
+      'Jeśli chcesz kilka sztuk, najlepiej sprawdzić dostępność bezpośrednio na miejscu.'
+    ]
+  },
+  {
+    keywords: ['czy jest limit na osobe', 'czy jest limit na osobę', 'limit na osobe', 'limit na osobę'],
+    replies: [
+      'Nie mam informacji o limicie sztuk na osobę. Najlepiej zapytać w sklepie.',
+      'Limit zakupowy nie jest podany na stronie.'
+    ]
+  },
+  {
+    keywords: ['czy beda nowe rozmiary', 'czy będą nowe rozmiary'],
+    replies: [
+      'Na stronie podane są rozmiary S–XL. Nie ma informacji o nowych rozmiarach.',
+      'Aktualna rozmiarówka to S, M, L i XL.'
+    ]
+  },
+  {
+    keywords: ['czy bedzie xs', 'czy będzie xs'],
+    replies: [
+      'Na stronie nie ma rozmiaru XS. Dostępne są S, M, L i XL.',
+      'Aktualnie rozmiarówka zaczyna się od S.'
+    ]
+  },
+  {
+    keywords: ['czy bedzie xxl', 'czy będzie xxl'],
+    replies: [
+      'Na stronie nie ma rozmiaru XXL. Dostępne są S, M, L i XL.',
+      'Aktualnie największy podany rozmiar to XL.'
+    ]
+  },
+  {
+    keywords: ['czy mozna zamowic xs', 'czy można zamówić xs', 'czy mozna zamowic xxl', 'czy można zamówić xxl'],
+    replies: [
+      'Nie ma zamówień online ani dodatkowych rozmiarów na stronie. Aktualnie podane są S–XL.',
+      'Aktualna rozmiarówka to S, M, L i XL.'
+    ]
+  },
+  {
+    keywords: ['czy jest czarna wersja', 'czarna wersja'],
+    replies: [
+      'Na stronie pokazany jest biały T-shirt z czarnym printem.',
+      'Aktualnie podany wariant to biały z czarnym nadrukiem.'
+    ]
+  },
+  {
+    keywords: ['czy nadruk schodzi', 'nadruk schodzi', 'trwalosc nadruku', 'trwałość nadruku'],
+    replies: [
+      'Nie mam szczegółowych danych o trwałości nadruku. Najlepiej prać zgodnie z metką produktu.',
+      'Żeby dbać o nadruk, trzymaj się zaleceń z metki.'
+    ]
+  },
+  {
+    keywords: ['czy jest haft', 'haft', 'nadruk czy haft'],
+    replies: [
+      'Na stronie produkt jest opisany jako biały T-shirt z czarnym printem.',
+      'Podany jest czarny print, nie haft.'
+    ]
+  },
+  {
+    keywords: ['czy to drop 001', 'czy to lot 001'],
+    replies: [
+      'Tak, LEGACY to DROP 001 / LOT 001 PRIZM BRAND.',
+      'LEGACY jest pierwszym oficjalnym dropem PRIZM BRAND.'
+    ]
+  },
+  {
+    keywords: ['czy kolekcja wroci', 'czy kolekcja wróci', 'czy bedzie restock', 'czy będzie restock'],
+    replies: [
+      'Nie — LEGACY jest jednorazowym dropem i po wyprzedaniu nie wróci.',
+      'Nie będzie restocku kolekcji LEGACY po wyczerpaniu zapasów.'
+    ]
+  },
+  {
+    keywords: ['czy warto czekac', 'czy warto czekać'],
+    replies: [
+      'Jeśli chodzi o LEGACY, nie warto czekać na restock — kolekcja nie wróci po wyprzedaniu.',
+      'LEGACY jest limitowane, więc po wyczerpaniu zapasów nie będzie kolejnej szansy.'
+    ]
+  },
+  {
+    keywords: ['kiedy bedzie dostawa', 'kiedy będzie dostawa', 'nowa dostawa'],
+    replies: [
+      'Nie ma informacji o nowej dostawie Legacy Tee. Drop jest limitowany do wyczerpania zapasów.',
+      'LEGACY nie ma zapowiedzianego restocku — po wyprzedaniu nie wraca.'
+    ]
+  },
+  {
+    keywords: ['czy moge sprawdzic stan', 'czy mogę sprawdzić stan', 'stan magazynowy'],
+    replies: [
+      'Nie mam podglądu aktualnego stanu magazynowego. Najlepiej sprawdzić na miejscu w sklepie.',
+      'Stan stocku najlepiej potwierdzić bezpośrednio w Sklep Chiński BOBOWA.'
+    ]
+  },
+  {
+    keywords: ['czy strona ma sklep', 'sklep online', 'koszyk', 'dodaj do koszyka'],
+    replies: [
+      'Strona nie ma sklepu online ani koszyka. Zakup odbywa się tylko stacjonarnie.',
+      'Nie ma sprzedaży przez stronę — produkt kupisz na miejscu w Bobowej.'
+    ]
+  },
+  {
+    keywords: ['czy moge zamowic przez dm', 'czy mogę zamówić przez dm', 'zamowienie przez instagram', 'zamówienie przez instagram'],
+    replies: [
+      'Na stronie podana jest wyłącznie sprzedaż stacjonarna. W sprawach dodatkowych najlepiej napisać przez social media.',
+      'Zakup jest stacjonarny, ale kontakt przez social media znajdziesz w sekcji Kontakt.'
+    ]
+  },
+  {
+    keywords: ['czy jest paczka', 'czy pakujecie', 'opakowanie'],
+    replies: [
+      'Nie mam informacji o opakowaniu produktu. Najlepiej zapytać na miejscu w sklepie.',
+      'Szczegóły pakowania najlepiej sprawdzić przy zakupie stacjonarnym.'
+    ]
+  },
+  {
+    keywords: ['czy sa naklejki', 'czy są naklejki', 'stickers', 'gratis'],
+    replies: [
+      'Nie mam informacji o gratisach lub naklejkach przy zakupie.',
+      'Gratisy nie są podane na stronie — najlepiej zapytać w sklepie.'
+    ]
+  },
+  {
+    keywords: ['czy moge zobaczyc loty', 'czy mogę zobaczyć loty'],
+    replies: [
+      'Loty znajdziesz w sekcji LOTY na stronie — przesuń karuzelę, żeby zobaczyć dostępne pozycje.',
+      'Sekcja LOTY pokazuje aktywne i zablokowane rozdziały historii PRIZM.'
+    ]
+  },
+  {
+    keywords: ['dlaczego zablokowane', 'czemu zablokowane', 'locked', 'nadchodzi'],
+    replies: [
+      'Zablokowane loty oznaczają przyszłe lub nieaktywne rozdziały, które mogą zostać ujawnione później.',
+      'Sekcje z kłódką są oznaczone jako “Nadchodzi”.'
+    ]
+  },
+  {
+    keywords: ['co znaczy legacy', 'znaczenie legacy'],
+    replies: [
+      'LEGACY oznacza dziedzictwo — ten drop ma symbolizować pierwszy mocny ślad PRIZM BRAND.',
+      'Legacy to dziedzictwo, czyli idea zostawienia po sobie czegoś trwałego.'
+    ]
+  },
+  {
+    keywords: ['co znaczy prizm', 'znaczenie prizm'],
+    replies: [
+      'PRIZM to nazwa marki i jej własna tożsamość wizualna.',
+      'PRIZM BRAND to niezależna marka odzieżowa z własną narracją.'
+    ]
+  },
+  {
+    keywords: ['czy to twoja marka', 'czy to wasza marka'],
+    replies: [
+      'Tak, PRIZM BRAND to niezależna marka odzieżowa tworzona wokół limitowanych dropów.',
+      'PRIZM BRAND to marka stojąca za dropem LEGACY.'
+    ]
+  },
+  {
+    keywords: ['czy jest legalne', 'legalne'],
+    replies: [
+      'Produkt jest sprzedawany stacjonarnie w sklepie wskazanym na stronie.',
+      'Zakup odbywa się na miejscu w Sklep Chiński BOBOWA.'
+    ]
+  },
+  {
+    keywords: ['czy moge placic euro', 'czy można płacić euro', 'euro'],
+    replies: [
+      'Nie mam informacji o płatności w euro. Najlepiej zapytać bezpośrednio w sklepie.',
+      'Walutę i formę płatności najlepiej potwierdzić na miejscu.'
+    ]
+  },
+  {
+    keywords: ['czy jest faktura vat', 'faktura vat'],
+    replies: [
+      'W sprawie faktury VAT najlepiej zapytać bezpośrednio w sklepie.',
+      'Nie mam potwierdzonej informacji o fakturze VAT.'
+    ]
+  },
+  {
+    keywords: ['czy moge oddac jak nie pasuje', 'czy mogę oddać jak nie pasuje'],
+    replies: [
+      'Zasady zwrotu lub wymiany rozmiaru najlepiej potwierdzić na miejscu przed zakupem.',
+      'Przed zakupem zapytaj w sklepie o możliwość zwrotu lub wymiany.'
+    ]
+  },
+  {
+    keywords: ['czy pasuje na 180', 'czy pasuje na 170', 'czy pasuje na 175', 'czy pasuje na 185'],
+    replies: [
+      'Przy takim pytaniu najlepiej sprawdzić tabelę wymiarów i porównać ją ze swoją koszulką.',
+      'Wzrost pomaga, ale najważniejsza jest klatka i długość z tabeli rozmiarów.'
+    ]
+  },
+  {
+    keywords: ['czy moge dostac zdjecie', 'czy mogę dostać zdjęcie'],
+    replies: [
+      'Zdjęcia produktu są pokazane na stronie przy sekcji LEGACY i produkcie.',
+      'Sprawdź zdjęcia w sekcji głównej i przy produkcie Legacy Tee.'
+    ]
+  },
+  {
+    keywords: ['czy jest modelka', 'czy jest model'],
+    replies: [
+      'Na stronie pokazane są zdjęcia modelu i produktu Legacy Tee.',
+      'Zdjęcia modelowe znajdziesz w górnej części strony.'
+    ]
+  },
+  {
+    keywords: ['czy moge udostepnic', 'czy mogę udostępnić', 'share'],
+    replies: [
+      'Jasne, możesz udostępnić stronę PRIZM BRAND znajomym.',
+      'Śmiało — pokaż drop LEGACY dalej.'
+    ]
+  },
+  {
+    keywords: ['czy macie sklep', 'sklep stacjonarny'],
+    replies: [
+      'Produkty są dostępne stacjonarnie w Sklep Chiński BOBOWA przy ul. Długiej 7.',
+      'Tak, zakup odbywa się w punkcie stacjonarnym w Bobowej.'
+    ]
+  },
+  {
+    keywords: ['czy mozna kupic dzis', 'czy można kupić dziś', 'dzisiaj', 'dziś'],
+    replies: [
+      'Jeśli sklep jest otwarty i stock nadal jest dostępny, możesz kupić Legacy Tee na miejscu.',
+      'Sprawdź godziny otwarcia i dostępność na miejscu — drop jest limitowany.'
+    ]
+  },
+  {
+    keywords: ['czy mozna jutro', 'czy można jutro', 'jutro'],
+    replies: [
+      'Możesz sprawdzić jutro w godzinach otwarcia sklepu, ale dostępność zależy od stocku.',
+      'Jutro warto podejść do sklepu w godzinach otwarcia i sprawdzić dostępność.'
+    ]
+  },
+  {
+    keywords: ['czy jest daleko od centrum', 'centrum bobowej', 'centrum'],
+    replies: [
+      'Adres to ul. Długa 7 w Bobowej. Najłatwiej sprawdzić dokładną trasę w mapach.',
+      'Sklep znajduje się przy ul. Długiej 7 w Bobowej.'
+    ]
+  },
+  {
+    keywords: ['czy to limit', 'limit'],
+    replies: [
+      'Tak, kolekcja LEGACY jest limitowana i dostępna tylko do wyczerpania zapasów.',
+      'To limitowany drop — po wyprzedaniu nie będzie restocku.'
+    ]
+  },
+  {
+    keywords: ['czy kupie pozniej', 'czy kupię później', 'kupie pozniej', 'kupię później'],
+    replies: [
+      'Możliwe, ale stock jest limitowany. Gdy się skończy, LEGACY nie wróci.',
+      'Nie ma gwarancji, że produkt będzie później — drop jest dostępny do wyczerpania zapasów.'
+    ]
+  },
+  {
+    keywords: ['czy jest taniej dla znajomych', 'dla znajomych'],
+    replies: [
+      'Cena podana na stronie to 169,99 zł.',
+      'Aktualna cena Legacy Tee to 169,99 zł.'
+    ]
+  },
+  {
+    keywords: ['czy robicie bluzy', 'czy beda bluzy', 'czy będą bluzy'],
+    replies: [
+      'Na tej stronie pokazany jest Legacy Tee. Kolejne produkty będą ogłaszane osobno.',
+      'Aktualnie głównym produktem jest T-shirt Legacy Tee.'
+    ]
+  },
+  {
+    keywords: ['czy beda spodnie', 'czy będą spodnie'],
+    replies: [
+      'Nie ma informacji o spodniach. Kolejne dropy będą ogłaszane osobno.',
+      'Aktualnie prezentowany produkt to Legacy Tee.'
+    ]
+  },
+  {
+    keywords: ['czy moge zamowic hurtowo', 'hurtowe zamowienie', 'hurtowe zamówienie'],
+    replies: [
+      'W sprawie hurtu najlepiej skontaktować się przez social media PRIZM BRAND.',
+      'Większe zamówienia najlepiej omawiać bezpośrednio przez kontakt PRIZM.'
+    ]
+  },
+  {
+    keywords: ['czy moge byc modelem', 'czy mogę być modelem', 'modeling', 'sesja dla marki'],
+    replies: [
+      'W sprawie sesji lub współpracy jako model najlepiej napisać przez social media PRIZM BRAND.',
+      'PRIZM jest otwarty na twórców — odezwij się przez sekcję Kontakt.'
+    ]
+  },
+  {
+    keywords: ['czy szukacie ludzi', 'praca', 'pracowac', 'pracować'],
+    replies: [
+      'Nie mam informacji o rekrutacji. W sprawie współpracy najlepiej napisać przez social media.',
+      'Jeśli chcesz współpracować z PRIZM, skorzystaj z kontaktu w social media.'
+    ]
+  },
+  {
+    keywords: ['czy jest gwarancja', 'gwarancja'],
+    replies: [
+      'W sprawie gwarancji lub reklamacji najlepiej zapytać bezpośrednio w sklepie.',
+      'Nie mam pełnych zasad gwarancji — potwierdź szczegóły na miejscu.'
+    ]
+  },
+  {
+    keywords: ['czy macie regulamin', 'regulamin'],
+    replies: [
+      'Na stronie nie widzę osobnego regulaminu. Szczegóły zakupu najlepiej potwierdzić w sklepie.',
+      'Regulamin zakupów stacjonarnych najlepiej sprawdzić bezpośrednio na miejscu.'
+    ]
+  },
+  {
+    keywords: ['czy moge dostac paragon', 'czy mogę dostać paragon'],
+    replies: [
+      'W sprawie paragonu zapytaj bezpośrednio podczas zakupu w sklepie.',
+      'Paragon najlepiej potwierdzić na miejscu przy płatności.'
+    ]
+  },
+  {
+    keywords: ['czy jest dostępne na allegro', 'allegro', 'olx', 'vinted'],
+    replies: [
+      'Oficjalnie na stronie podany jest tylko zakup stacjonarny w Bobowej.',
+      'Nie ma informacji o sprzedaży na Allegro, OLX ani Vinted — oficjalny zakup jest stacjonarny.'
+    ]
+  },
+  {
+    keywords: ['czy jest oryginalna strona', 'oficjalna strona'],
+    replies: [
+      'Jesteś na stronie PRIZM BRAND poświęconej dropowi LEGACY.',
+      'To strona prezentująca PRIZM BRAND i kolekcję LEGACY.'
+    ]
+  },
+  {
+    keywords: ['czy moge kupic dla kogos', 'czy mogę kupić dla kogoś'],
+    replies: [
+      'Tak, możesz kupić koszulkę jako prezent, tylko dobierz rozmiar po tabeli wymiarów.',
+      'Jasne — przy zakupie dla kogoś najlepiej znać jego wymiary lub ulubiony oversize fit.'
+    ]
+  },
+  {
+    keywords: ['czy jest pakowanie na prezent', 'pakowanie na prezent'],
+    replies: [
+      'Nie mam informacji o pakowaniu na prezent. Najlepiej zapytać bezpośrednio w sklepie.',
+      'Pakowanie prezentowe nie jest podane na stronie.'
+    ]
+  },
+  {
+    keywords: ['czy moge napisac po angielsku', 'english', 'angielski'],
+    replies: [
+      'Możesz pisać po polsku lub prosto po angielsku, ale podstawowe info o dropie mam tutaj po polsku.',
+      'Jasne, ale najlepiej odpowiadam na pytania o PRIZM BRAND po polsku.'
+    ]
+  },
+  {
+    keywords: ['co polecasz', 'co wybrac', 'co wybrać'],
+    replies: [
+      'Polecam sprawdzić Legacy Tee, bo to pierwszy limitowany drop PRIZM BRAND.',
+      'Najważniejszy wybór to rozmiar — sprawdź tabelę i zdecyduj, jak luźny fit lubisz.'
+    ]
+  },
+  {
+    keywords: ['czy jest wygodna', 'wygodna', 'komfort'],
+    replies: [
+      'Legacy Tee to oversize T-shirt ze 100% bawełny, więc jest projektowana pod luźny, codzienny fit.',
+      'Oversize krój i bawełna dają wygodny, streetwearowy charakter.'
+    ]
+  },
+  {
+    keywords: ['czy jest premium', 'premium'],
+    replies: [
+      'Legacy Tee to limitowany drop PRIZM BRAND wykonany ze 100% bawełny.',
+      'Produkt jest częścią limitowanej kolekcji, a materiał to 100% bawełna.'
+    ]
+  },
+  {
+    keywords: ['czy jest minimalistyczna', 'minimalistyczna', 'minimal'],
+    replies: [
+      'Legacy Tee ma prosty biało-czarny układ z mocnym printem PRIZM.',
+      'To biały oversize T-shirt z czarnym nadrukiem — prosty, ale wyrazisty.'
+    ]
+  },
+  {
+    keywords: ['czy jest streetwearowa', 'streetwearowa'],
+    replies: [
+      'Tak, Legacy Tee jest osadzona w klimacie streetwearu i limitowanych dropów.',
+      'To oversize T-shirt z ulicznym charakterem PRIZM BRAND.'
+    ]
+  },
+  {
+    keywords: ['czy to merch', 'merch'],
+    replies: [
+      'Legacy Tee to oficjalny produkt PRIZM BRAND, bardziej jako limitowany drop niż zwykły merch.',
+      'To limitowana koszulka PRIZM BRAND z kolekcji LEGACY.'
+    ]
+  },
+  {
+    keywords: ['czy jest dla fanow', 'dla fanów', 'fanow'],
+    replies: [
+      'Tak, LEGACY jest dla osób, które chcą być częścią pierwszego rozdziału PRIZM BRAND.',
+      'To drop dla ludzi, którzy czują klimat marki i chcą mieć pierwszy lot.'
+    ]
+  },
+  {
+    keywords: ['czy moge sledzic', 'czy mogę śledzić', 'sledzic', 'śledzić'],
+    replies: [
+      'Najlepiej śledzić PRIZM BRAND przez social media z sekcji Kontakt.',
+      'Kolejne informacje o dropach będą najpewniej pojawiać się w social media.'
+    ]
+  },
+  {
+    keywords: ['czy jest tylko w bobowej', 'tylko bobowa'],
+    replies: [
+      'Tak, na stronie podany jest zakup wyłącznie stacjonarnie w Bobowej.',
+      'Aktualnie wskazana lokalizacja sprzedaży to Sklep Chiński BOBOWA.'
+    ]
+  },
+  {
+    keywords: ['czy moge kupic w sklepie chinskim', 'czy mogę kupić w sklepie chińskim'],
+    replies: [
+      'Tak, Legacy Tee kupisz w Sklep Chiński BOBOWA przy ul. Długiej 7.',
+      'Dokładnie — zakup odbywa się stacjonarnie w Sklep Chiński BOBOWA.'
+    ]
+  },
+  {
+    keywords: ['czy jest na stanie s', 'czy jest s', 'dostepne s', 'dostępne s'],
+    replies: [
+      'Nie mam aktualnego stocku rozmiaru S. Sprawdź dostępność na miejscu w sklepie.',
+      'Rozmiar S jest w tabeli, ale aktualny stan najlepiej potwierdzić w sklepie.'
+    ]
+  },
+  {
+    keywords: ['czy jest na stanie m', 'czy jest m', 'dostepne m', 'dostępne m'],
+    replies: [
+      'Nie mam aktualnego stocku rozmiaru M. Sprawdź dostępność na miejscu w sklepie.',
+      'Rozmiar M jest w tabeli, ale stan najlepiej potwierdzić bezpośrednio w sklepie.'
+    ]
+  },
+  {
+    keywords: ['czy jest na stanie l', 'czy jest l', 'dostepne l', 'dostępne l'],
+    replies: [
+      'Nie mam aktualnego stocku rozmiaru L. Sprawdź dostępność na miejscu w sklepie.',
+      'Rozmiar L jest w tabeli, ale aktualną dostępność potwierdzisz w sklepie.'
+    ]
+  },
+  {
+    keywords: ['czy jest na stanie xl', 'czy jest xl', 'dostepne xl', 'dostępne xl'],
+    replies: [
+      'Nie mam aktualnego stocku rozmiaru XL. Sprawdź dostępność na miejscu w sklepie.',
+      'Rozmiar XL jest w tabeli, ale stan najlepiej potwierdzić bezpośrednio w sklepie.'
+    ]
+  },
+  {
+    keywords: ['czy jest taniej przy kilku', 'rabat przy kilku'],
+    replies: [
+      'Nie mam informacji o rabacie przy kilku sztukach. Najlepiej zapytać w sklepie.',
+      'Cena na stronie to 169,99 zł za sztukę.'
+    ]
+  },
+  {
+    keywords: ['czy moge zaplacic pozniej', 'czy mogę zapłacić później', 'raty'],
+    replies: [
+      'Nie mam informacji o płatności później lub ratach. Zakup jest stacjonarny.',
+      'Formę płatności najlepiej potwierdzić bezpośrednio w sklepie.'
+    ]
+  },
+  {
+    keywords: ['czy moge odlozyc do jutra', 'czy mogę odłożyć do jutra'],
+    replies: [
+      'Nie mam informacji o odkładaniu produktu. Najlepiej zapytać bezpośrednio w sklepie.',
+      'Odłożenie do jutra trzeba ustalić na miejscu.'
+    ]
+  },
+  {
+    keywords: ['czy jest kolejka', 'kolejka'],
+    replies: [
+      'Nie mam informacji o kolejce w sklepie. Najlepiej sprawdzić na miejscu.',
+      'Nie widzę aktualnej sytuacji w sklepie — możesz podejść w godzinach otwarcia.'
+    ]
+  },
+  {
+    keywords: ['czy jest otwarte teraz', 'otwarte teraz'],
+    replies: [
+      'Sprawdź aktualny dzień i godziny: pon–pt 09:00–18:00, sobota 09:00–14:00, niedziela zamknięte.',
+      'Godziny sklepu: pon–pt 09:00–18:00, sobota 09:00–14:00, niedziela zamknięte.'
+    ]
+  },
+  {
+    keywords: ['czy jest parking', 'parking'],
+    replies: [
+      'Nie mam informacji o parkingu. Najlepiej sprawdzić okolicę ul. Długiej 7 w mapach.',
+      'Parking nie jest opisany na stronie.'
+    ]
+  },
+  {
+    keywords: ['czy jest przystanek', 'autobus', 'pociag', 'pociąg'],
+    replies: [
+      'Nie mam informacji o komunikacji. Najłatwiej sprawdzić trasę do ul. Długiej 7 w mapach.',
+      'Dojazd najlepiej sprawdzić w mapach dla adresu ul. Długa 7, Bobowa.'
+    ]
+  },
+  {
+    keywords: ['czy sklep jest w galerii', 'galeria'],
+    replies: [
+      'Na stronie podany jest Sklep Chiński BOBOWA przy ul. Długiej 7.',
+      'Lokalizacja sprzedaży to ul. Długa 7, 38-350 Bobowa.'
+    ]
+  },
+  {
+    keywords: ['czy mozna obejrzec bez kupowania', 'czy można obejrzeć bez kupowania'],
+    replies: [
+      'Produkt jest dostępny stacjonarnie, więc możesz sprawdzić go na miejscu.',
+      'Najlepiej podejść do sklepu i obejrzeć Legacy Tee bezpośrednio.'
+    ]
+  },
+  {
+    keywords: ['czy moge dotknac materialu', 'czy mogę dotknąć materiału'],
+    replies: [
+      'Taką możliwość najlepiej sprawdzić na miejscu w sklepie.',
+      'Na miejscu możesz zapytać obsługę o obejrzenie produktu.'
+    ]
+  },
+  {
+    keywords: ['czy jest miękka', 'czy jest miekka', 'miękka', 'miekka'],
+    replies: [
+      'Na stronie podany jest materiał 100% bawełna, ale najlepiej sprawdzić odczucie na miejscu.',
+      'Legacy Tee jest ze 100% bawełny — dotyk materiału najlepiej ocenić w sklepie.'
+    ]
+  },
+  {
+    keywords: ['czy druk jest z przodu', 'przod', 'przód', 'tyl', 'tył'],
+    replies: [
+      'Zdjęcia produktu na stronie pokazują wygląd koszulki — sprawdź sekcję produktu.',
+      'Najlepiej zobaczyć zdjęcie Legacy Tee przy produkcie, żeby sprawdzić rozmieszczenie printu.'
+    ]
+  },
+  {
+    keywords: ['czy strona dziala na telefonie', 'mobile', 'telefon'],
+    replies: [
+      'Tak, strona jest przygotowana pod telefon i komputer.',
+      'Strona ma wersję responsywną, więc powinna działać też na telefonie.'
+    ]
+  },
+  {
+    keywords: ['czemu nie ai', 'to nie ai', 'nie ai'],
+    replies: [
+      'To PRIZM bot bez prawdziwego AI — działa na słowach kluczowych i gotowych odpowiedziach.',
+      'Dokładnie, zero magii AI — proste reguły, szybkie odpowiedzi.'
+    ]
+  },
+  {
+    keywords: ['haha', 'hehe', 'xd', 'lol'],
+    replies: [
+      'Hehe, PRIZM bot działa prosto, ale skutecznie.',
+      'XD, pytaj o drop, rozmiar albo sklep.'
+    ]
+  },
+  {
+    keywords: ['kocham', 'sztos', 'mega', 'fajne', 'ładne', 'ladne'],
+    replies: [
+      'Doceniamy! LEGACY to pierwszy rozdział PRIZM BRAND.',
+      'Dzięki! Jeśli siedzi Ci klimat, sprawdź Legacy Tee na miejscu.'
+    ]
+  },
+  {
+    keywords: ['brzydkie', 'nie podoba', 'slabe', 'słabe'],
+    replies: [
+      'Nie każdemu musi siąść ten klimat — PRIZM stawia na własną wizję.',
+      'Spoko, każdy ma swój gust. LEGACY jest dla tych, którzy czują ten vibe.'
+    ]
+  },
+  {
+    keywords: ['za male', 'za małe', 'za duze', 'za duże'],
+    replies: [
+      'Przy wyborze rozmiaru najlepiej korzystać z tabeli wymiarów i pamiętać, że to oversize.',
+      'Sprawdź klatkę i długość w tabeli — wtedy łatwiej uniknąć złego rozmiaru.'
+    ]
+  },
+  {
+    keywords: ['czy moge kupic bez mierzenia', 'czy mogę kupić bez mierzenia'],
+    replies: [
+      'Możesz, ale najlepiej wcześniej sprawdzić tabelę wymiarów.',
+      'Da się, ale przy oversize najbezpieczniej porównać wymiary.'
+    ]
+  },
+  {
+    keywords: ['czy jest oversize mocny', 'duzy oversize', 'duży oversize'],
+    replies: [
+      'Legacy Tee ma oversize krój. Dokładny efekt zależy od wybranego rozmiaru i sylwetki.',
+      'To luźniejszy T-shirt, więc sprawdź tabelę wymiarów przed wyborem.'
+    ]
+  },
+  {
+    keywords: ['czy jest slim', 'slim fit', 'dopasowana'],
+    replies: [
+      'Nie, Legacy Tee jest opisana jako oversize T-shirt.',
+      'To nie slim fit — krój jest oversize.'
+    ]
+  },
+  {
+    keywords: ['czy jest boxy fit', 'boxy fit'],
+    replies: [
+      'Na stronie produkt jest opisany jako oversize T-shirt.',
+      'Krój jest oversize, więc najlepiej ocenić go po wymiarach z tabeli.'
+    ]
+  },
+  {
+    keywords: ['czy jest długa', 'czy jest dluga', 'dluga koszulka', 'długa koszulka'],
+    replies: [
+      'Długość zależy od rozmiaru: S 68 cm, M 71 cm, L 74 cm, XL 77 cm.',
+      'Sprawdź długość w tabeli: od 68 cm w S do 77 cm w XL.'
+    ]
+  },
+  {
+    keywords: ['czy jest szeroka', 'szeroka koszulka'],
+    replies: [
+      'Szerokość zależy od rozmiaru: klatka od 96–100 cm w S do 110–116 cm w XL.',
+      'To oversize, więc jest luźniejsza — dokładne wartości są w tabeli rozmiarów.'
+    ]
+  },
+  {
+    keywords: ['czy moge sprawdzic cene', 'czy mogę sprawdzić cenę'],
+    replies: [
+      'Cena Legacy Tee to 169,99 zł.',
+      'Koszulka kosztuje 169,99 zł.'
+    ]
+  },
+  {
+    keywords: ['czy jest taniej po czasie', 'czy cena spadnie'],
+    replies: [
+      'Nie mam informacji o obniżce ceny. Aktualna cena to 169,99 zł.',
+      'Cena podana na stronie to 169,99 zł.'
+    ]
+  },
+  {
+    keywords: ['czy mozna zamowic telefonicznie', 'czy można zamówić telefonicznie'],
+    replies: [
+      'Na stronie nie ma informacji o zamówieniach telefonicznych. Zakup jest stacjonarny.',
+      'Najpewniej kupisz Legacy Tee bezpośrednio na miejscu w sklepie.'
+    ]
+  },
+  {
+    keywords: ['czy jest kontakt do sklepu', 'kontakt do sklepu'],
+    replies: [
+      'Na stronie podany jest adres sklepu, ale nie ma numeru telefonu.',
+      'Adres sklepu: Sklep Chiński BOBOWA, ul. Długa 7, 38-350 Bobowa.'
+    ]
+  },
+  {
+    keywords: ['czy moge zadac pytanie', 'czy mogę zadać pytanie'],
+    replies: [
+      'Jasne, pytaj o produkt, rozmiar, cenę, dostępność albo miejsce zakupu.',
+      'Pytaj śmiało — najlepiej ogarniam info o Legacy Tee i sklepie.'
+    ]
+  },
+  {
+    keywords: ['czy jest darmowe', 'za darmo'],
+    replies: [
+      'Nie, Legacy Tee kosztuje 169,99 zł.',
+      'Cena koszulki to 169,99 zł.'
+    ]
+  },
+  {
+    keywords: ['czy mozna negocjowac', 'czy można negocjować'],
+    replies: [
+      'Cena podana na stronie to 169,99 zł. Ewentualne pytania o cenę najlepiej kierować na miejscu.',
+      'Nie mam informacji o negocjacji ceny.'
+    ]
+  },
+  {
+    keywords: ['czy to nowa marka', 'nowa marka'],
+    replies: [
+      'PRIZM BRAND prezentuje swój pierwszy oficjalny drop LEGACY.',
+      'LEGACY to pierwszy oficjalny rozdział marki PRIZM BRAND.'
+    ]
+  },
+  {
+    keywords: ['czy jest stara kolekcja', 'stara kolekcja'],
+    replies: [
+      'Na stronie główną kolekcją jest LEGACY — pierwszy oficjalny drop.',
+      'Aktualnie pokazany drop to LEGACY.'
+    ]
+  },
+  {
+    keywords: ['czy beda fotki na insta', 'czy będą fotki na insta'],
+    replies: [
+      'Najlepiej obserwować social media PRIZM BRAND z sekcji Kontakt.',
+      'Nowe zdjęcia i informacje najłatwiej śledzić przez social media.'
+    ]
+  },
+  {
+    keywords: ['czy moge uzyc zdjec', 'czy mogę użyć zdjęć'],
+    replies: [
+      'W sprawie użycia zdjęć najlepiej skontaktować się z PRIZM BRAND przez social media.',
+      'Prawa do materiałów najlepiej potwierdzić bezpośrednio z marką.'
+    ]
+  },
+  {
+    keywords: ['czy macie tabele rozmiarow', 'czy macie tabelę rozmiarów'],
+    replies: [
+      'Tak, tabela rozmiarów jest dostępna po kliknięciu przycisku “Tabela rozmiarów & zakup”.',
+      'Kliknij przycisk przy produkcie, żeby zobaczyć tabelę rozmiarów.'
+    ]
+  },
+  {
+    keywords: ['czy mozna scrollowac loty', 'czy można scrollować loty'],
+    replies: [
+      'Tak, sekcję LOTY możesz przesuwać w bok.',
+      'Przesuń karuzelę lotów, żeby zobaczyć więcej pozycji.'
+    ]
+  },
+  {
+    keywords: ['czy jest animacja', 'animacje'],
+    replies: [
+      'Strona ma animacje przewijania, slider i ruchomy ticker.',
+      'Tak, strona korzysta z prostych animacji i efektów wizualnych PRIZM.'
+    ]
+  },
+  {
+    keywords: ['czy moge zmienic motyw', 'czy mogę zmienić motyw'],
+    replies: [
+      'Tak, kliknij ikonę motywu w prawym górnym rogu strony.',
+      'Motyw zmienisz przyciskiem w nawigacji.'
+    ]
+  },
+  {
+    keywords: ['czemu cena 169', 'dlaczego 169'],
+    replies: [
+      'Cena Legacy Tee to 169,99 zł, zgodnie z informacją przy produkcie.',
+      'To cena ustawiona dla limitowanego dropu LEGACY.'
+    ]
+  },
+  {
+    keywords: ['czy moge kupic teraz', 'czy mogę kupić teraz'],
+    replies: [
+      'Możesz kupić na miejscu, jeśli sklep jest otwarty i produkt nadal jest dostępny.',
+      'Zakup jest możliwy stacjonarnie w godzinach otwarcia sklepu, do wyczerpania zapasów.'
+    ]
+  },
+  {
+    keywords: ['czy jest drop dzis', 'czy drop jest dziś', 'drop dzisiaj'],
+    replies: [
+      'Na stronie aktywny jest drop LEGACY dostępny stacjonarnie do wyczerpania zapasów.',
+      'LEGACY jest pokazany jako aktualny drop PRIZM BRAND.'
+    ]
+  },
+  {
+    keywords: ['czy to koniec', 'koniec dropu'],
+    replies: [
+      'Drop kończy się, gdy wyczerpie się stock. Nie mam aktualnego stanu magazynowego.',
+      'LEGACY trwa do wyczerpania zapasów.'
+    ]
+  },
+  {
+    keywords: ['czy warto jechac', 'czy warto jechać'],
+    replies: [
+      'Jeśli chcesz Legacy Tee, jedyna opcja zakupu to stacjonarnie w Bobowej.',
+      'Warto podjechać, jeśli zależy Ci na limitowanym dropie, bo nie ma sprzedaży online.'
+    ]
+  },
+  {
+    keywords: ['czy jest blisko', 'blisko mnie'],
+    replies: [
+      'Nie znam Twojej lokalizacji. Adres sklepu to ul. Długa 7, 38-350 Bobowa.',
+      'Sprawdź trasę do Sklep Chiński BOBOWA, ul. Długa 7, w mapach.'
+    ]
+  },
+  {
+    keywords: ['czy produkt jest nowy', 'nowy produkt'],
+    replies: [
+      'Legacy Tee to produkt z limitowanego dropu PRIZM BRAND.',
+      'To oficjalny drop LEGACY dostępny stacjonarnie.'
+    ]
+  },
+  {
+    keywords: ['czy moge zobaczyc produkt', 'czy mogę zobaczyć produkt'],
+    replies: [
+      'Zdjęcia produktu znajdziesz w sekcji LEGACY Tee na stronie.',
+      'Sprawdź sekcję produktu — tam pokazana jest koszulka.'
+    ]
+  },
+  {
+    keywords: ['czy sa inne produkty', 'czy są inne produkty'],
+    replies: [
+      'Na stronie głównym produktem jest Legacy Tee, a inne loty pokazane są w sekcji LOTY.',
+      'Aktualnie opisany produkt to Legacy Tee, a loty możesz sprawdzić w osobnej sekcji.'
+    ]
+  },
+  {
+    keywords: ['czy sprzedajecie przez allegro', 'czy sprzedajecie na allegro'],
+    replies: [
+      'Nie ma informacji o sprzedaży przez Allegro. Oficjalny zakup jest tylko stacjonarnie.',
+      'Na stronie podana jest wyłącznie sprzedaż stacjonarna w Bobowej.'
+    ]
+  },
+  {
+    keywords: ['czy sprzedajecie przez vinted', 'vinted'],
+    replies: [
+      'Nie ma informacji o sprzedaży przez Vinted. Oficjalny zakup odbywa się stacjonarnie.',
+      'Legacy Tee kupisz oficjalnie na miejscu w Bobowej.'
+    ]
+  },
+  {
+    keywords: ['czy mozna zareklamowac', 'czy można zareklamować'],
+    replies: [
+      'W sprawie reklamacji najlepiej zapytać bezpośrednio w sklepie.',
+      'Reklamacje i zasady obsługi po zakupie ustalisz na miejscu.'
+    ]
+  },
+  {
+    keywords: ['czy moge zostac ambasadorem', 'czy mogę zostać ambasadorem', 'ambasador'],
+    replies: [
+      'W sprawie ambasadorstwa lub współpracy napisz przez social media PRIZM BRAND.',
+      'Jeśli masz pomysł na współpracę, odezwij się przez sekcję Kontakt.'
+    ]
+  },
+  {
+    keywords: ['czy mozna nagrac tiktoka', 'czy można nagrać tiktoka', 'tiktok z koszulka'],
+    replies: [
+      'Jasne, jeśli masz Legacy Tee, możesz pokazać swój fit i oznaczyć PRIZM BRAND.',
+      'Śmiało — PRIZM lubi kreatywny content.'
+    ]
+  },
+  {
+    keywords: ['czy mozna oznaczyc', 'czy można oznaczyć', 'oznaczyc was', 'oznaczyć was'],
+    replies: [
+      'Tak, oznacz PRIZM BRAND w social media.',
+      'Jasne — social media znajdziesz w sekcji Kontakt.'
+    ]
+  },
+  {
+    keywords: ['czy macie haslo', 'hasło marki', 'slogan'],
+    replies: [
+      'Klimat LEGACY najlepiej opisuje: “To nie jest produkt. To dziedzictwo.”',
+      'PRIZM BRAND stawia na wizję, kulturę i dziedzictwo.'
+    ]
+  },
+  {
+    keywords: ['czy moge poznac historie', 'czy mogę poznać historię'],
+    replies: [
+      'Historię PRIZM BRAND znajdziesz w sekcji Geneza.',
+      'Sekcja Geneza opisuje drogę od marzenia do dropu LEGACY.'
+    ]
+  },
+  {
+    keywords: ['czy to pierwsza kolekcja', 'pierwsza kolekcja'],
+    replies: [
+      'Tak, LEGACY jest pokazane jako pierwszy oficjalny drop PRIZM BRAND.',
+      'LEGACY to pierwszy rozdział marki PRIZM BRAND.'
+    ]
+  },
+  {
+    keywords: ['czy marka jest z bobowej', 'z bobowej'],
+    replies: [
+      'Na stronie wskazana lokalizacja sprzedaży to Bobowa, ul. Długa 7.',
+      'Produkt kupisz stacjonarnie w Bobowej.'
+    ]
+  },
+  {
+    keywords: ['czy jest lokalna marka', 'lokalna marka'],
+    replies: [
+      'Tak, PRIZM BRAND komunikuje się jako polska marka z lokalnym podejściem.',
+      'PRIZM BRAND to polska marka odzieżowa oparta na własnej wizji.'
+    ]
+  },
+  {
+    keywords: ['czy moge wejsc do sklepu', 'czy można wejść do sklepu'],
+    replies: [
+      'Tak, zakup odbywa się stacjonarnie w godzinach otwarcia sklepu.',
+      'Podejdź do Sklep Chiński BOBOWA w godzinach otwarcia.'
+    ]
+  },
+  {
+    keywords: ['czy sklep jest zamkniety', 'czy sklep jest zamknięty'],
+    replies: [
+      'Godziny: pon–pt 09:00–18:00, sobota 09:00–14:00, niedziela zamknięte.',
+      'Sprawdź dzień tygodnia: w niedzielę sklep jest zamknięty.'
+    ]
+  },
+  {
+    keywords: ['czy macie strone', 'czy macie stronę'],
+    replies: [
+      'Tak, jesteś na stronie PRIZM BRAND poświęconej dropowi LEGACY.',
+      'Strona prezentuje PRIZM BRAND, drop LEGACY, loty i kontakt.'
+    ]
+  },
+  {
+    keywords: ['czy moge kliknac produkt', 'czy mogę kliknąć produkt'],
+    replies: [
+      'Kliknięcie aktywnego lotu przewija stronę do sekcji produktu.',
+      'Aktywne loty prowadzą do sekcji produktu.'
+    ]
+  },
+  {
+    keywords: ['czy macie faq', 'faq'],
+    replies: [
+      'Ten chat działa jak szybkie FAQ o Legacy Tee, zakupie, rozmiarach i sklepie.',
+      'Pytaj tutaj — odpowiadam na najważniejsze rzeczy o dropie.'
+    ]
+  },
+  {
+    keywords: ['czy jest po polsku', 'polski jezyk', 'polski język'],
+    replies: [
+      'Tak, strona i odpowiedzi są po polsku.',
+      'PRIZM bot odpowiada po polsku.'
+    ]
+  },
+  {
+    keywords: ['czy moge kupic dla dziewczyny', 'czy mogę kupić dla dziewczyny'],
+    replies: [
+      'Jasne, tylko dobierz rozmiar po tabeli wymiarów — koszulka ma oversize fit.',
+      'Na prezent dla dziewczyny najlepiej sprawdzić długość i klatkę w tabeli.'
+    ]
+  },
+  {
+    keywords: ['czy moge kupic dla chlopaka', 'czy mogę kupić dla chłopaka'],
+    replies: [
+      'Jasne, Legacy Tee może być prezentem — dobierz rozmiar po tabeli wymiarów.',
+      'Dla chłopaka najlepiej porównać jego ulubioną koszulkę z tabelą PRIZM.'
+    ]
+  },
+  {
+    keywords: ['czy jest dla nastolatka', 'nastolatek'],
+    replies: [
+      'Może pasować, ale najlepiej dobrać rozmiar po wymiarach, bo krój jest oversize.',
+      'Sprawdź tabelę rozmiarów — to najlepszy sposób doboru.'
+    ]
+  },
+  {
+    keywords: ['czy jest elegancka', 'elegancka'],
+    replies: [
+      'Legacy Tee to raczej streetwearowy, oversize T-shirt niż elegancki produkt.',
+      'To produkt w klimacie streetwear, nie formalna koszulka.'
+    ]
+  },
+  {
+    keywords: ['czy nadaje sie do szkoly', 'czy nadaje się do szkoły', 'do szkoly', 'do szkoły'],
+    replies: [
+      'To bawełniany oversize T-shirt, więc sprawdzi się jako codzienny outfit.',
+      'Legacy Tee pasuje do codziennego streetwearu, także do szkoły.'
+    ]
+  },
+  {
+    keywords: ['czy nadaje sie na prezent urodzinowy', 'urodziny'],
+    replies: [
+      'Tak, może być prezentem, szczególnie dla osoby lubiącej limitowany streetwear.',
+      'Na prezent pamiętaj tylko o dobraniu rozmiaru po tabeli.'
+    ]
+  },
+  {
+    keywords: ['czy jest modne', 'modne'],
+    replies: [
+      'Legacy Tee jest w klimacie oversize streetwear i limitowanych dropów.',
+      'Jeśli lubisz streetwear i dropy, ten klimat będzie pasował.'
+    ]
+  },
+  {
+    keywords: ['czy sa opinie', 'czy są opinie', 'opinie'],
+    replies: [
+      'Na stronie nie ma sekcji opinii. Najlepiej sprawdzić produkt na żywo w sklepie.',
+      'Nie mam opinii klientów — możesz ocenić koszulkę stacjonarnie.'
+    ]
+  },
+  {
+    keywords: ['czy moge polubic', 'czy mogę polubić', 'like', 'serduszko'],
+    replies: [
+      'Tak, przy produkcie możesz kliknąć serduszko i zostawić like.',
+      'Kliknij serduszko przy Legacy Tee, żeby polubić produkt.'
+    ]
+  },
+  {
+    keywords: ['liczba polubien', 'liczba polubień', 'ile like', 'ile lajków', 'ile lajkow'],
+    replies: [
+      'Licznik polubień znajduje się obok serduszka przy produkcie.',
+      'Aktualne polubienia zobaczysz przy przycisku serduszka.'
+    ]
+  },
+  {
+    keywords: ['serduszko nie dziala', 'serduszko nie działa', 'like nie dziala', 'like nie działa'],
+    replies: [
+      'Jeśli like nie działa, odśwież stronę i spróbuj ponownie.',
+      'Może być problem z połączeniem z API polubień — spróbuj jeszcze raz za chwilę.'
+    ]
+  },
+  {
+    keywords: ['czy chat zapisuje', 'historia chatu'],
+    replies: [
+      'Ten prosty bot odpowiada na wiadomości na stronie i nie potrzebuje modelu AI.',
+      'Chat działa lokalnie na regułach słów kluczowych.'
+    ]
+  },
+  {
+    keywords: ['czy potrzebuje konta', 'czy potrzebuję konta', 'konto'],
+    replies: [
+      'Do sprawdzenia strony i informacji o produkcie nie potrzebujesz konta.',
+      'Zakup jest stacjonarny, więc konto online nie jest potrzebne.'
+    ]
+  },
+  {
+    keywords: ['czy trzeba sie logowac', 'czy trzeba się logować', 'logowanie'],
+    replies: [
+      'Nie, strona nie wymaga logowania do sprawdzenia informacji o dropie.',
+      'Nie musisz się logować, żeby zobaczyć produkt i informacje.'
+    ]
+  },
+  {
+    keywords: ['czy moge zapisac koszyk', 'czy mogę zapisać koszyk'],
+    replies: [
+      'Nie ma koszyka online, bo sprzedaż odbywa się tylko stacjonarnie.',
+      'Strona nie obsługuje koszyka — zakup jest na miejscu.'
+    ]
+  },
+  {
+    keywords: ['czy sa kupony', 'czy są kupony', 'kupon'],
+    replies: [
+      'Na stronie nie ma informacji o kuponach rabatowych.',
+      'Aktualna cena Legacy Tee to 169,99 zł.'
+    ]
+  },
+  {
+    keywords: ['czy to dobra jakosc', 'czy to dobra jakość'],
+    replies: [
+      'Na stronie podany jest materiał 100% bawełna i oversize krój.',
+      'Legacy Tee to bawełniany oversize T-shirt z limitowanego dropu.'
+    ]
+  },
+  {
+    keywords: ['czy jest limitowany nadruk', 'limitowany nadruk'],
+    replies: [
+      'Cała kolekcja LEGACY jest limitowana i jednorazowa.',
+      'LEGACY to limitowany drop — po wyprzedaniu nie wraca.'
+    ]
+  },
+  {
+    keywords: ['czy mozna kupic poza godzinami', 'czy można kupić poza godzinami'],
+    replies: [
+      'Zakup jest możliwy tylko w godzinach otwarcia sklepu.',
+      'Podejdź w godzinach: pon–pt 09:00–18:00 albo sobota 09:00–14:00.'
+    ]
+  },
+  {
+    keywords: ['czy jest otwarte w swieta', 'czy jest otwarte w święta', 'swieta', 'święta'],
+    replies: [
+      'Nie mam informacji o godzinach świątecznych. Najlepiej sprawdzić bezpośrednio w sklepie.',
+      'Godziny świąteczne nie są podane na stronie.'
+    ]
+  },
+  {
+    keywords: ['czy moge kupic na raty', 'czy mogę kupić na raty'],
+    replies: [
+      'Nie mam informacji o płatności ratalnej. Zakup jest stacjonarny.',
+      'Raty nie są podane na stronie.'
+    ]
+  },
+  {
+    keywords: ['czy mozna zamowic z odbiorem', 'czy można zamówić z odbiorem'],
+    replies: [
+      'Nie ma zamówień online — zakup odbywa się bezpośrednio stacjonarnie.',
+      'Najprościej podejść do sklepu i kupić produkt na miejscu.'
+    ]
+  },
+  {
+    keywords: ['czy moge sprawdzic przed przyjazdem', 'czy mogę sprawdzić przed przyjazdem'],
+    replies: [
+      'Nie mam aktualnego stocku. Najlepiej skontaktować się przez social media albo sprawdzić na miejscu.',
+      'Dostępność najlepiej potwierdzić bezpośrednio przed wizytą.'
+    ]
+  },
+  {
+    keywords: ['czy jest w sklepie dzisiaj', 'czy jest dzisiaj'],
+    replies: [
+      'Nie mam podglądu aktualnego stocku. Drop jest dostępny do wyczerpania zapasów.',
+      'Najpewniej sprawdzisz to bezpośrednio w Sklep Chiński BOBOWA.'
+    ]
+  },
+  {
+    keywords: ['czy moge zamowic przez formularz', 'formularz'],
+    replies: [
+      'Na stronie nie ma formularza zamówienia. Zakup odbywa się tylko stacjonarnie.',
+      'Nie ma formularza zakupu — Legacy Tee kupisz w sklepie na miejscu.'
+    ]
+  },
+  {
+    keywords: ['czy jest sklep internetowy', 'internetowy sklep'],
+    replies: [
+      'Nie, aktualnie nie ma sklepu internetowego. Sprzedaż jest tylko stacjonarna.',
+      'PRIZM nie prowadzi teraz sprzedaży online dla Legacy Tee.'
+    ]
+  },
+  {
+    keywords: ['czy moge placic przelewem', 'czy mogę płacić przelewem', 'przelew'],
+    replies: [
+      'Nie mam informacji o płatności przelewem. Formę płatności potwierdź w sklepie.',
+      'Płatność przelewem nie jest podana na stronie.'
+    ]
+  },
+  {
+    keywords: ['czy moge zamowic za pobraniem', 'czy mogę zamówić za pobraniem', 'pobranie'],
+    replies: [
+      'Nie ma wysyłki, więc nie ma też płatności za pobraniem.',
+      'Za pobraniem nie jest dostępne — zakup tylko stacjonarnie.'
+    ]
+  },
+  {
+    keywords: ['czy moge kupic na miejscu', 'czy mogę kupić na miejscu'],
+    replies: [
+      'Tak, Legacy Tee kupisz na miejscu w Sklep Chiński BOBOWA.',
+      'Tak — sprzedaż odbywa się stacjonarnie w Bobowej.'
+    ]
+  },
+  {
+    keywords: ['czy jest kontakt z wlascicielem', 'czy jest kontakt z właścicielem'],
+    replies: [
+      'Najlepiej skorzystać z social media PRIZM BRAND w sekcji Kontakt.',
+      'Kontakt z marką znajdziesz przez social media na stronie.'
+    ]
+  },
+  {
+    keywords: ['czy mozna wyslac propozycje', 'czy można wysłać propozycję', 'propozycja'],
+    replies: [
+      'Tak, propozycje współpracy najlepiej wysłać przez social media PRIZM BRAND.',
+      'Masz pomysł? Odezwij się przez sekcję Kontakt.'
+    ]
+  },
+  {
+    keywords: ['czy robicie projekty', 'projekty odziezy', 'projekty odzieży'],
+    replies: [
+      'PRIZM BRAND tworzy własne dropy i jest otwarty na kolaboracje.',
+      'W sprawie projektów lub collabu odezwij się przez social media.'
+    ]
+  },
+  {
+    keywords: ['czy jest produkcja lokalna', 'lokalna produkcja'],
+    replies: [
+      'PRIZM BRAND komunikuje się jako polska marka korzystająca z lokalnych dostawców.',
+      'Tak, marka podkreśla lokalne podejście i polski charakter.'
+    ]
+  },
+  {
+    keywords: ['czy made in poland', 'made in poland'],
+    replies: [
+      'PRIZM BRAND to polska marka, korzystająca z lokalnych dostawców.',
+      'Marka komunikuje się jako polska i lokalna.'
+    ]
+  },
+  {
+    keywords: ['czy sa dostawcy lokalni', 'czy są dostawcy lokalni'],
+    replies: [
+      'Tak, PRIZM BRAND korzysta z lokalnych dostawców.',
+      'Marka stawia na lokalnych dostawców i własną wizję.'
+    ]
+  },
+  {
+    keywords: ['czy moge obejrzec geneze', 'czy mogę obejrzeć genezę'],
+    replies: [
+      'Sekcja Geneza znajduje się na stronie pod głównym hero.',
+      'Przewiń do sekcji Geneza, żeby poznać historię PRIZM BRAND.'
+    ]
+  },
+  {
+    keywords: ['czy slider dziala', 'czy slider działa'],
+    replies: [
+      'Slider w sekcji Geneza możesz przewijać strzałkami albo kropkami.',
+      'Użyj strzałek przy sliderze Geneza, żeby zobaczyć kolejne slajdy.'
+    ]
+  },
+  {
+    keywords: ['czy da sie przewijac', 'czy da się przewijać'],
+    replies: [
+      'Tak, stronę przewijasz normalnie, a sekcję LOTY możesz przesuwać w bok.',
+      'Sekcja LOTY działa jak pozioma karuzela.'
+    ]
+  },
+  {
+    keywords: ['czy model zmienia sie w dark mode', 'czy model zmienia się w dark mode'],
+    replies: [
+      'Tak, po zmianie motywu zdjęcie modelu może przełączyć się na wersję ciemną lub jasną.',
+      'Motyw strony zmienia też klimat zdjęcia modelu.'
+    ]
+  },
+  {
+    keywords: ['czy moge zobaczyc tabele', 'czy mogę zobaczyć tabelę'],
+    replies: [
+      'Kliknij przycisk “Tabela rozmiarów & zakup” przy produkcie.',
+      'Tabela rozmiarów otwiera się w oknie przy sekcji produktu.'
+    ]
+  },
+  {
+    keywords: ['czy modal', 'okno rozmiarow', 'okno rozmiarów'],
+    replies: [
+      'Tabela rozmiarów otwiera się jako modal po kliknięciu przycisku przy produkcie.',
+      'Kliknij “Tabela rozmiarów & zakup”, żeby otworzyć okno z wymiarami.'
+    ]
+  },
+  {
+    keywords: ['czy moge zamknac tabele', 'czy mogę zamknąć tabelę'],
+    replies: [
+      'Tak, kliknij X w oknie tabeli albo kliknij poza modalem.',
+      'Tabelę zamkniesz przyciskiem X.'
+    ]
+  },
+  {
+    keywords: ['czy moge kliknac serce', 'czy mogę kliknąć serce'],
+    replies: [
+      'Tak, serduszko przy produkcie służy do polubienia Legacy Tee.',
+      'Kliknij serce przy produkcie, żeby zostawić like.'
+    ]
+  },
+  {
+    keywords: ['czy like jest zapisany', 'czy lajk jest zapisany'],
+    replies: [
+      'Like powinien zapisać się przez system polubień strony.',
+      'Polubienia są obsługiwane przez API strony.'
+    ]
+  },
+  {
+    keywords: ['czy potrzebny internet', 'internet potrzebny'],
+    replies: [
+      'Strona potrzebuje internetu do załadowania zasobów i działania funkcji online, takich jak polubienia.',
+      'Do działania strony i polubień potrzebne jest połączenie z internetem.'
+    ]
+  },
+  {
+    keywords: ['czy bot dziala offline', 'czy bot działa offline'],
+    replies: [
+      'Sam bot słów kluczowych działa w przeglądarce, ale strona i zasoby nadal potrzebują normalnego załadowania.',
+      'Ten bot nie używa Gemini ani API AI — działa na gotowych regułach.'
+    ]
+  },
+  {
+    keywords: ['czy usuneliscie gemini', 'czy usunęliście gemini', 'gemini'],
+    replies: [
+      'Tak, ten chat może działać bez Gemini — tylko na słowach kluczowych i gotowych odpowiedziach.',
+      'Gemini nie jest potrzebne do tej wersji chatu.'
+    ]
+  },
+  {
+    keywords: ['czy trzeba api key', 'api key', 'klucz api'],
+    replies: [
+      'Nie, przy wersji na słowa kluczowe nie potrzebujesz żadnego API key.',
+      'Ten bot nie wymaga klucza Gemini ani połączenia z modelem AI.'
+    ]
+  },
+  {
+    keywords: ['czy trzeba php', 'php', 'ai_chat.php'],
+    replies: [
+      'Do prostego bota na słowa kluczowe nie potrzebujesz pliku ai_chat.php.',
+      'Ten chat może działać bez PHP, jeśli używasz tylko gotowych odpowiedzi w JavaScript.'
+    ]
+  },
+  {
+    keywords: ['czy dziala szybko', 'czy działa szybko'],
+    replies: [
+      'Tak, bot na słowach kluczowych odpowiada bardzo szybko, bo nie czeka na zewnętrzne API.',
+      'Ta wersja działa lekko i szybko — bez modelu AI.'
+    ]
+  },
+  {
+    keywords: ['czy bot sie myli', 'czy bot się myli'],
+    replies: [
+      'To prosty bot, więc odpowiada najlepiej wtedy, gdy pytanie zawiera znane słowa kluczowe.',
+      'Mogę nie złapać każdego pytania, ale ogarniam podstawowe info o PRIZM BRAND.'
+    ]
+  },
+  {
+    keywords: ['nie odpowiedziales', 'nie odpowiedziałeś', 'zla odpowiedz', 'zła odpowiedź'],
+    replies: [
+      'Spróbuj zapytać prościej, np. o cenę, rozmiar, zakup, adres albo wysyłkę.',
+      'Jestem prostym botem — najlepiej działam na konkretne pytania o produkt i sklep.'
+    ]
+  },
+  {
+    keywords: ['powiedz wszystko', 'wszystko o koszulce'],
+    replies: [
+      'Legacy Tee to biały oversize T-shirt z czarnym printem, 100% bawełna, cena 169,99 zł, rozmiary S–XL, zakup tylko stacjonarnie w Bobowej.',
+      'Najważniejsze info: Legacy Tee kosztuje 169,99 zł, ma 100% bawełny, rozmiary S–XL i jest dostępna tylko w Sklep Chiński BOBOWA.'
+    ]
+  },
+  {
+    keywords: ['najważniejsze info', 'najwazniejsze info', 'podsumowanie'],
+    replies: [
+      'Cena: 169,99 zł. Rozmiary: S–XL. Materiał: 100% bawełna. Zakup: tylko stacjonarnie, ul. Długa 7, Bobowa.',
+      'Legacy Tee: limitowany oversize T-shirt, 100% bawełna, 169,99 zł, dostępny tylko na miejscu w Bobowej.'
+    ]
+  }
+];
+// Odpowiedź domyślna, gdy nie znaleziono słowa kluczowego
+const defaultReplies = [
+  'Mogę pomóc z zakupem, ceną, rozmiarem, materiałem albo adresem sklepu w Bobowej.',
+  'Nie mam gotowej odpowiedzi na to pytanie, ale mogę podać info o Legacy Tee, cenie, rozmiarach i miejscu zakupu.',
+  'Zapytaj mnie o cenę, rozmiar, materiał, dostępność albo gdzie kupić Legacy Tee.'
+];
+
+
+
+aiChatToggle.addEventListener('click', () => {
+  aiChat.classList.toggle('open');
+
+  if (aiChat.classList.contains('open')) {
+    aiChatInput.focus();
+  }
+});
+
+aiChatClose.addEventListener('click', () => {
+  aiChat.classList.remove('open');
+});
+
+aiChatForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const userMessage = aiChatInput.value.trim();
+  if (!userMessage) return;
+
+  addAiMessage(userMessage, 'user');
+
+  aiChatInput.value = '';
+  aiChatSend.disabled = true;
+
+  const typing = addAiMessage('Piszę odpowiedź...', 'bot');
+
+  setTimeout(() => {
+    typing.textContent = getBotReply(userMessage);
+    aiChatSend.disabled = false;
+    aiChatInput.focus();
+  }, 350);
+});
+
+
+</script>
+</body>
+</html>
